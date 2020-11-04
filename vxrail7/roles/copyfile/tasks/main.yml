@@ -1,0 +1,5 @@
+---
+# tasks file for lcm
+# Copying Bundle and lcm_advancedproperties file to target VxM
+ - name: "Copy files to target VXRail Manager"
+   include_tasks: copy_files.yml

@@ -1,0 +1,1945 @@
+{
+    "id": "57def07e-8d7e-4b18-84ef-480e2a39fee5",
+    "state": "COMPLETED",
+    "owner": "Day1BringUp",
+    "extension": {
+        "stage": "",
+        "guidelines": [],
+        "validation": {
+            "cursory": {
+                "errors": {
+                    "fields": [],
+                    "generals": []
+                },
+                "warnings": {
+                    "fields": [],
+                    "generals": []
+                }
+            },
+            "thorough": {
+                "errors": {
+                    "fields": [],
+                    "generals": []
+                },
+                "warnings": {
+                    "fields": [],
+                    "generals": []
+                }
+            }
+        },
+        "steps": [
+            {
+                "id": "vxm_system_services_stop",
+                "name": "VxRail Manager Service Stop",
+                "path": "vxm_system_services_stop",
+                "state": "COMPLETED",
+                "start_time": 1594843313485,
+                "end_time": 1594843313523
+            },
+            {
+                "id": "cursory_validator",
+                "name": "Cursory Validator",
+                "path": "cursory_validation.cursory_validator.cursory_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843313601,
+                "end_time": 1594843313712
+            },
+            {
+                "id": "cursory_validation_report",
+                "name": "Cursory Validation Report",
+                "path": "cursory_validation_report",
+                "state": "COMPLETED",
+                "start_time": 1594843313806,
+                "end_time": 1594843313849
+            },
+            {
+                "id": "general_thorough_validation.foreach_host_mark_pnic_working_mode {8QXWLR2}",
+                "name": "Host Mark PNIC Working Mode for Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "host_mark_pnic_working_mode",
+                        "name": "Host Mark PNIC Working Mode",
+                        "path": "general_thorough_validation.foreach_host_mark_pnic_working_mode.3.host_mark_pnic_working_mode",
+                        "state": "COMPLETED",
+                        "start_time": 1594843314677,
+                        "end_time": 1594843314724
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.foreach_host_mark_pnic_working_mode {8QXVLR2}",
+                "name": "Host Mark PNIC Working Mode for Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "host_mark_pnic_working_mode",
+                        "name": "Host Mark PNIC Working Mode",
+                        "path": "general_thorough_validation.foreach_host_mark_pnic_working_mode.2.host_mark_pnic_working_mode",
+                        "state": "COMPLETED",
+                        "start_time": 1594843314498,
+                        "end_time": 1594843314542
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.foreach_host_mark_pnic_working_mode {8QWZHQ2}",
+                "name": "Host Mark PNIC Working Mode for Host 8QWZHQ2",
+                "steps": [
+                    {
+                        "id": "host_mark_pnic_working_mode",
+                        "name": "Host Mark PNIC Working Mode",
+                        "path": "general_thorough_validation.foreach_host_mark_pnic_working_mode.1.host_mark_pnic_working_mode",
+                        "state": "COMPLETED",
+                        "start_time": 1594843314322,
+                        "end_time": 1594843314367
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.foreach_host_mark_pnic_working_mode {8QWXLR2}",
+                "name": "Host Mark PNIC Working Mode for Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "host_mark_pnic_working_mode",
+                        "name": "Host Mark PNIC Working Mode",
+                        "path": "general_thorough_validation.foreach_host_mark_pnic_working_mode.0.host_mark_pnic_working_mode",
+                        "state": "COMPLETED",
+                        "start_time": 1594843314139,
+                        "end_time": 1594843314194
+                    }
+                ]
+            },
+            {
+                "id": "hardware_model_validator",
+                "name": "Hardware Model Validator",
+                "path": "general_thorough_validation.thorough_group_validator.hardware_model_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843314910,
+                "end_time": 1594843314969
+            },
+            {
+                "id": "standalone_discovered_host_configuration_validator",
+                "name": "Discovered Host Configuration Validator",
+                "path": "general_thorough_validation.thorough_group_validator.standalone_discovered_host_configuration_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843315016,
+                "end_time": 1594843315070
+            },
+            {
+                "id": "cluster_disk_type_configuration_validator",
+                "name": "Cluster Disk Type Configuration Validator",
+                "path": "general_thorough_validation.thorough_group_validator.cluster_disk_type_configuration_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843315121,
+                "end_time": 1594843316462
+            },
+            {
+                "id": "esxi_host_account_validator",
+                "name": "ESXi Host Account Validator",
+                "path": "general_thorough_validation.thorough_group_validator.esxi_host_account_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843316523,
+                "end_time": 1594843333056
+            },
+            {
+                "id": "vxm_service_account_validator",
+                "name": "VxRail Manager Service Account Validator",
+                "path": "general_thorough_validation.thorough_group_validator.vxm_service_account_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843333120,
+                "end_time": 1594843333491
+            },
+            {
+                "id": "vxm_root_account_validator",
+                "name": "VxRail Manager Root Account Validator",
+                "path": "general_thorough_validation.thorough_group_validator.vxm_root_account_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843333552,
+                "end_time": 1594843333922
+            },
+            {
+                "id": "multi_disk_group_configuration_validator",
+                "name": "Multi Disk Groups Configuration Validator",
+                "path": "general_thorough_validation.thorough_group_validator.multi_disk_group_configuration_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843333986,
+                "end_time": 1594843339709
+            },
+            {
+                "id": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss {8QXWLR2}",
+                "name": "Assign Customer Supplied PNICs to VSS for Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "assign_pnic_to_vss",
+                        "name": "Host Assign PNIC to VSS",
+                        "path": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss.3.assign_pnic_to_vss",
+                        "state": "COMPLETED",
+                        "start_time": 1594843341216,
+                        "end_time": 1594843341428
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss {8QXVLR2}",
+                "name": "Assign Customer Supplied PNICs to VSS for Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "assign_pnic_to_vss",
+                        "name": "Host Assign PNIC to VSS",
+                        "path": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss.2.assign_pnic_to_vss",
+                        "state": "COMPLETED",
+                        "start_time": 1594843340827,
+                        "end_time": 1594843341016
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss {8QWZHQ2}",
+                "name": "Assign Customer Supplied PNICs to VSS for Host 8QWZHQ2",
+                "steps": [
+                    {
+                        "id": "assign_pnic_to_vss",
+                        "name": "Host Assign PNIC to VSS",
+                        "path": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss.1.assign_pnic_to_vss",
+                        "state": "COMPLETED",
+                        "start_time": 1594843340443,
+                        "end_time": 1594843340628
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss {8QWXLR2}",
+                "name": "Assign Customer Supplied PNICs to VSS for Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "assign_pnic_to_vss",
+                        "name": "Host Assign PNIC to VSS",
+                        "path": "general_thorough_validation.thorough_group_validator.assign_customer_supplied_pnics_to_vss.0.assign_pnic_to_vss",
+                        "state": "COMPLETED",
+                        "start_time": 1594843340037,
+                        "end_time": 1594843340249
+                    }
+                ]
+            },
+            {
+                "id": "vlan_live_validator",
+                "name": "VLAN Live Validator",
+                "path": "general_thorough_validation.thorough_group_validator.vlan_live_validator.vxrail_supplied.vlan_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843341706,
+                "end_time": 1594843463811
+            },
+            {
+                "id": "twonode_network_compatibility_live_validator",
+                "name": "vSAN 2 Node Network Compatibility Live Validator",
+                "path": "general_thorough_validation.thorough_group_validator.twonode_network_compatibility_live_validator",
+                "state": "SKIPPED",
+                "start_time": 1594843463955,
+                "end_time": 1594843464041
+            },
+            {
+                "id": "network_compatibility_live_validator",
+                "name": "Network Compatibility Live Validator",
+                "path": "general_thorough_validation.thorough_group_validator.network_compatibility_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843464128,
+                "end_time": 1594843465235
+            },
+            {
+                "id": "general_thorough_validation.thorough_validator {8QXWLR2}",
+                "name": "Thorough Validation for Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "physical_link_validator",
+                        "name": "Physical Link Validator",
+                        "path": "general_thorough_validation.thorough_validator.3.physical_link_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843467758,
+                        "end_time": 1594843467842
+                    },
+                    {
+                        "id": "physical_link_live_validator",
+                        "name": "Physical Link Live Validator",
+                        "path": "general_thorough_validation.thorough_validator.3.physical_link_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843467919,
+                        "end_time": 1594843468030
+                    },
+                    {
+                        "id": "two_node_robo_minnics_on_host_validator",
+                        "name": "vSAN 2 Node NIC Number Validator",
+                        "path": "general_thorough_validation.thorough_validator.3.two_node_robo_minnics_on_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843468108,
+                        "end_time": 1594843468194
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.thorough_validator {8QXVLR2}",
+                "name": "Thorough Validation for Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "physical_link_validator",
+                        "name": "Physical Link Validator",
+                        "path": "general_thorough_validation.thorough_validator.2.physical_link_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843467114,
+                        "end_time": 1594843467207
+                    },
+                    {
+                        "id": "physical_link_live_validator",
+                        "name": "Physical Link Live Validator",
+                        "path": "general_thorough_validation.thorough_validator.2.physical_link_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843467285,
+                        "end_time": 1594843467372
+                    },
+                    {
+                        "id": "two_node_robo_minnics_on_host_validator",
+                        "name": "vSAN 2 Node NIC Number Validator",
+                        "path": "general_thorough_validation.thorough_validator.2.two_node_robo_minnics_on_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843467446,
+                        "end_time": 1594843467528
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.thorough_validator {8QWZHQ2}",
+                "name": "Thorough Validation for Host 8QWZHQ2",
+                "steps": [
+                    {
+                        "id": "physical_link_validator",
+                        "name": "Physical Link Validator",
+                        "path": "general_thorough_validation.thorough_validator.1.physical_link_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843466171,
+                        "end_time": 1594843466567
+                    },
+                    {
+                        "id": "physical_link_live_validator",
+                        "name": "Physical Link Live Validator",
+                        "path": "general_thorough_validation.thorough_validator.1.physical_link_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843466644,
+                        "end_time": 1594843466729
+                    },
+                    {
+                        "id": "two_node_robo_minnics_on_host_validator",
+                        "name": "vSAN 2 Node NIC Number Validator",
+                        "path": "general_thorough_validation.thorough_validator.1.two_node_robo_minnics_on_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843466810,
+                        "end_time": 1594843466892
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.thorough_validator {8QWXLR2}",
+                "name": "Thorough Validation for Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "physical_link_validator",
+                        "name": "Physical Link Validator",
+                        "path": "general_thorough_validation.thorough_validator.0.physical_link_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843465527,
+                        "end_time": 1594843465617
+                    },
+                    {
+                        "id": "physical_link_live_validator",
+                        "name": "Physical Link Live Validator",
+                        "path": "general_thorough_validation.thorough_validator.0.physical_link_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843465694,
+                        "end_time": 1594843465781
+                    },
+                    {
+                        "id": "two_node_robo_minnics_on_host_validator",
+                        "name": "vSAN 2 Node NIC Number Validator",
+                        "path": "general_thorough_validation.thorough_validator.0.two_node_robo_minnics_on_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843465859,
+                        "end_time": 1594843465943
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.network_prepare_aware_foreach_validator {8QXWLR2}",
+                "name": "Network Aware Validation for Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "time_sync_configuration_validator",
+                        "name": "Time Sync Configuration Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.3.time_sync_configuration_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843522939,
+                        "end_time": 1594843537367
+                    },
+                    {
+                        "id": "dns_hostnames_live_validator",
+                        "name": "DNS Hostname Live Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.3.dns_hostnames_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843537475,
+                        "end_time": 1594843539650
+                    },
+                    {
+                        "id": "witness_host_validator",
+                        "name": "Witness Host Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.3.witness_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843539748,
+                        "end_time": 1594843539862
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.network_prepare_aware_foreach_validator {8QXVLR2}",
+                "name": "Network Aware Validation for Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "time_sync_configuration_validator",
+                        "name": "Time Sync Configuration Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.2.time_sync_configuration_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843506595,
+                        "end_time": 1594843520215
+                    },
+                    {
+                        "id": "dns_hostnames_live_validator",
+                        "name": "DNS Hostname Live Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.2.dns_hostnames_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843520300,
+                        "end_time": 1594843522497
+                    },
+                    {
+                        "id": "witness_host_validator",
+                        "name": "Witness Host Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.2.witness_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843522588,
+                        "end_time": 1594843522686
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.network_prepare_aware_foreach_validator {8QWZHQ2}",
+                "name": "Network Aware Validation for Host 8QWZHQ2",
+                "steps": [
+                    {
+                        "id": "time_sync_configuration_validator",
+                        "name": "Time Sync Configuration Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.1.time_sync_configuration_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843490354,
+                        "end_time": 1594843503889
+                    },
+                    {
+                        "id": "dns_hostnames_live_validator",
+                        "name": "DNS Hostname Live Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.1.dns_hostnames_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843503977,
+                        "end_time": 1594843506148
+                    },
+                    {
+                        "id": "witness_host_validator",
+                        "name": "Witness Host Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.1.witness_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843506245,
+                        "end_time": 1594843506342
+                    }
+                ]
+            },
+            {
+                "id": "general_thorough_validation.network_prepare_aware_foreach_validator {8QWXLR2}",
+                "name": "Network Aware Validation for Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "time_sync_configuration_validator",
+                        "name": "Time Sync Configuration Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.0.time_sync_configuration_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843468573,
+                        "end_time": 1594843488324
+                    },
+                    {
+                        "id": "dns_hostnames_live_validator",
+                        "name": "DNS Hostname Live Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.0.dns_hostnames_live_validator",
+                        "state": "COMPLETED",
+                        "start_time": 1594843488428,
+                        "end_time": 1594843489622
+                    },
+                    {
+                        "id": "witness_host_validator",
+                        "name": "Witness Host Validator",
+                        "path": "general_thorough_validation.network_prepare_aware_foreach_validator.0.witness_host_validator",
+                        "state": "SKIPPED",
+                        "start_time": 1594843489732,
+                        "end_time": 1594843489896
+                    }
+                ]
+            },
+            {
+                "id": "dns_servers_configuration_live_validator",
+                "name": "DNS Server Configuration Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.dns_servers_configuration_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843540266,
+                "end_time": 1594843541484
+            },
+            {
+                "id": "ntp_servers_availability_validator",
+                "name": "NTP Server Availability Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.ntp_servers_availability_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843541582,
+                "end_time": 1594843542772
+            },
+            {
+                "id": "ip_address_configuration_live_validator",
+                "name": "IP Address Configuration Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.ip_address_configuration_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843542870,
+                "end_time": 1594843559234
+            },
+            {
+                "id": "external_vc_access_live_validator",
+                "name": "Customer Provided vCenter Access Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.external_vc_access_live_validator",
+                "state": "SKIPPED",
+                "start_time": 1594843559330,
+                "end_time": 1594843559438
+            },
+            {
+                "id": "external_vc_entities_live_validator",
+                "name": "Customer Provided vCenter Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.external_vc_entities_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843559543,
+                "end_time": 1594843559648
+            },
+            {
+                "id": "external_vc_version_compatibility_live_validator",
+                "name": "Customer Provided vCenter Version Compatibility Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.external_vc_version_compatibility_live_validator",
+                "state": "SKIPPED",
+                "start_time": 1594843559748,
+                "end_time": 1594843559861
+            },
+            {
+                "id": "host_version_compatibility_live_validator",
+                "name": "Host Version Compatibility Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.host_version_compatibility_live_validator",
+                "state": "SKIPPED",
+                "start_time": 1594843559961,
+                "end_time": 1594843560071
+            },
+            {
+                "id": "existing_ssodomain_access_live_validator",
+                "name": "SSO Domain Access Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.existing_ssodomain_access_live_validator",
+                "state": "SKIPPED",
+                "start_time": 1594843560176,
+                "end_time": 1594843560289
+            },
+            {
+                "id": "external_vc_capacity_limit_live_validator",
+                "name": "Customer Provided vCenter Capacity Limit Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.external_vc_capacity_limit_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843560394,
+                "end_time": 1594843562565
+            },
+            {
+                "id": "external_vc_license_validator",
+                "name": "Customer Provided vCenter License Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.external_vc_license_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843562678,
+                "end_time": 1594843564906
+            },
+            {
+                "id": "vc_user_permission_live_validator",
+                "name": "Validate vCenter User Permission",
+                "path": "general_thorough_validation.network_prepare_aware_validator.vc_user_permission_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843565017,
+                "end_time": 1594843567187
+            },
+            {
+                "id": "time_configuration_live_validator",
+                "name": "Time Configuration Live Validator",
+                "path": "general_thorough_validation.network_prepare_aware_validator.time_configuration_live_validator",
+                "state": "COMPLETED",
+                "start_time": 1594843567293,
+                "end_time": 1594843570127
+            },
+            {
+                "id": "validation_report",
+                "name": "Live Validation Report",
+                "path": "validation_report",
+                "state": "COMPLETED",
+                "start_time": 1594843570578,
+                "end_time": 1594843570695
+            },
+            {
+                "id": "vxm_static_ipchange",
+                "name": "VxRail Manager IP Address Configure",
+                "path": "vxm_prepare_and_primary_node_prepare.vxm_prepare.vxm_static_ipchange",
+                "state": "COMPLETED",
+                "start_time": 1594843570925,
+                "end_time": 1594843571046
+            },
+            {
+                "id": "vxm_init_dns",
+                "name": "VxRail Manager DNS Service Init",
+                "path": "vxm_prepare_and_primary_node_prepare.vxm_prepare.vxm_config_dns.internal.vxm_init_dns",
+                "state": "COMPLETED",
+                "start_time": 1594843571469,
+                "end_time": 1594843571587
+            },
+            {
+                "id": "vxm_time_sync",
+                "name": "VxRail Manager Time Synchronize",
+                "path": "vxm_prepare_and_primary_node_prepare.vxm_prepare.vxm_time_sync",
+                "state": "COMPLETED",
+                "start_time": 1594843571811,
+                "end_time": 1594843571937
+            },
+            {
+                "id": "vxm_auto_start_enable",
+                "name": "VxRail Manager Auto Start Enable",
+                "path": "vxm_prepare_and_primary_node_prepare.vxm_prepare.vxm_auto_start_enable",
+                "state": "COMPLETED",
+                "start_time": 1594843572061,
+                "end_time": 1594843572184
+            },
+            {
+                "id": "host_network_management_vlan_change",
+                "name": "Host Management VLAN Configure",
+                "path": "vxm_prepare_and_primary_node_prepare.primary_node_management_channel_prepare.host_network_management_vlan_change",
+                "state": "COMPLETED",
+                "start_time": 1594843572521,
+                "end_time": 1594843572643
+            },
+            {
+                "id": "host_network_management_ip_change",
+                "name": "Host Management IP Configure",
+                "path": "vxm_prepare_and_primary_node_prepare.primary_node_management_channel_prepare.host_network_management_ip_change",
+                "state": "COMPLETED",
+                "start_time": 1594843572758,
+                "end_time": 1594843572883
+            },
+            {
+                "id": "vc_initial_boot",
+                "name": "VxRail Provided vCenter Initialize",
+                "path": "internal_vc_prepare.internal.internal_vc_boot_up.internal_vc_prepare.vc_initial_boot",
+                "state": "COMPLETED",
+                "start_time": 1594843573564,
+                "end_time": 1594843573693
+            },
+            {
+                "id": "vc_auto_start_enable",
+                "name": "VxRail Provided vCenter Auto Start Enable",
+                "path": "internal_vc_prepare.internal.internal_vc_boot_up.internal_vc_prepare.vc_auto_start_enable",
+                "state": "COMPLETED",
+                "start_time": 1594843573811,
+                "end_time": 1594843573932
+            },
+            {
+                "id": "vcenter_time_sync",
+                "name": "vCenter Time Synchronize",
+                "path": "internal_vc_prepare.internal.internal_vc_boot_up.internal_vc_prepare.vcenter_time_sync",
+                "state": "COMPLETED",
+                "start_time": 1594843574054,
+                "end_time": 1594843574177
+            },
+            {
+                "id": "vc_mgmnt_account_create",
+                "name": "vCenter Management Account Create",
+                "path": "internal_vc_prepare.internal.internal_vc_boot_up.internal_vc_prepare.vc_mgmnt_account_create",
+                "state": "COMPLETED",
+                "start_time": 1594843574298,
+                "end_time": 1594843574420
+            },
+            {
+                "id": "vc_datacenter_create",
+                "name": "vCenter Datacenter Create",
+                "path": "internal_vc_prepare.internal.internal_vc_boot_up.internal_vc_prepare.vc_datacenter_create",
+                "state": "COMPLETED",
+                "start_time": 1594843574540,
+                "end_time": 1594843574663
+            },
+            {
+                "id": "create_vm_folder",
+                "name": "vCenter VM Folder Create",
+                "path": "cluster_basic_configure.cluster_basic_configure.create_vm_folder",
+                "state": "COMPLETED",
+                "start_time": 1594843575143,
+                "end_time": 1594843575281
+            },
+            {
+                "id": "cluster_create_default",
+                "name": "Cluster Create",
+                "path": "cluster_basic_configure.cluster_basic_configure.cluster_create_default",
+                "state": "COMPLETED",
+                "start_time": 1594843575438,
+                "end_time": 1594843575565
+            },
+            {
+                "id": "vxm_vc_plugin_register",
+                "name": "vCenter VxRail Manager Plugin Register",
+                "path": "cluster_basic_configure.cluster_basic_configure.vxm_vc_plugin_register",
+                "state": "COMPLETED",
+                "start_time": 1594843575682,
+                "end_time": 1594843575838
+            },
+            {
+                "id": "cluster_mgmt_account_permission_grant",
+                "name": "vCenter Management Account Permission Grant",
+                "path": "cluster_basic_configure.cluster_basic_configure.cluster_mgmt_account_permission_grant",
+                "state": "COMPLETED",
+                "start_time": 1594843575959,
+                "end_time": 1594843576087
+            },
+            {
+                "id": "vds_create_default",
+                "name": "vCenter VDS Create",
+                "path": "vxrail_supplied_vds_network_prepare.vxrail_supplied.vds_portgroup_configure.network_prepare.vds_create_default",
+                "state": "COMPLETED",
+                "start_time": 1594843576563,
+                "end_time": 1594843576685
+            },
+            {
+                "id": "vds_portgroup_create",
+                "name": "vCenter VDS Port Group Create",
+                "path": "vxrail_supplied_vds_network_prepare.vxrail_supplied.vds_portgroup_configure.network_prepare.vds_portgroup_create",
+                "state": "COMPLETED",
+                "start_time": 1594843576820,
+                "end_time": 1594843576965
+            },
+            {
+                "id": "cluster_network_teaming_enable",
+                "name": "Cluster Network Teaming Enable",
+                "path": "vxrail_supplied_vds_network_prepare.vxrail_supplied.vds_portgroup_configure.network_prepare.cluster_network_teaming_enable",
+                "state": "COMPLETED",
+                "start_time": 1594843577087,
+                "end_time": 1594843577226
+            },
+            {
+                "id": "cluster_network_nioc_enable",
+                "name": "Cluster Network NIOC Enable",
+                "path": "vxrail_supplied_vds_network_prepare.vxrail_supplied.vds_portgroup_configure.network_prepare.cluster_network_nioc_enable",
+                "state": "COMPLETED",
+                "start_time": 1594843577362,
+                "end_time": 1594843577520
+            },
+            {
+                "id": "host_election_service_disable",
+                "name": "Host Election Service Disable",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_election_service_disable",
+                "state": "COMPLETED",
+                "start_time": 1594843578057,
+                "end_time": 1594843578234
+            },
+            {
+                "id": "host_network_management_vlan_change",
+                "name": "Host Management VLAN Configure",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_network_management_vlan_change",
+                "state": "COMPLETED",
+                "start_time": 1594843578380,
+                "end_time": 1594843578545
+            },
+            {
+                "id": "host_network_management_ip_change",
+                "name": "Host Management IP Configure",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_network_management_ip_change",
+                "state": "COMPLETED",
+                "start_time": 1594843578666,
+                "end_time": 1594843578795
+            },
+            {
+                "id": "host_hostname_change",
+                "name": "Host Hostname Configure",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_hostname_change",
+                "state": "COMPLETED",
+                "start_time": 1594843578917,
+                "end_time": 1594843579043
+            },
+            {
+                "id": "host_platform_service_ip_update",
+                "name": "Host Platform Service IP Configuration",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_platform_service_ip_update",
+                "state": "COMPLETED",
+                "start_time": 1594843579166,
+                "end_time": 1594843579300
+            },
+            {
+                "id": "host_platform_service_restart",
+                "name": "Host Platform Service Restart",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_platform_service_restart",
+                "state": "COMPLETED",
+                "start_time": 1594843579422,
+                "end_time": 1594843579550
+            },
+            {
+                "id": "host_ptagent_ip_change",
+                "name": "Host PTAgent IP Configure",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_ptagent_ip_change",
+                "state": "COMPLETED",
+                "start_time": 1594843579672,
+                "end_time": 1594843579808
+            },
+            {
+                "id": "host_dns_change",
+                "name": "Host DNS Configure",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_dns_change",
+                "state": "COMPLETED",
+                "start_time": 1594843579939,
+                "end_time": 1594843580097
+            },
+            {
+                "id": "host_time_sync",
+                "name": "Host Time Sync",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_time_sync",
+                "state": "COMPLETED",
+                "start_time": 1594843580221,
+                "end_time": 1594843580541
+            },
+            {
+                "id": "host_unused_system_vms_remove",
+                "name": "Host Unused System VMs Remove",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_unused_system_vms_remove",
+                "state": "COMPLETED",
+                "start_time": 1594843580739,
+                "end_time": 1594843580875
+            },
+            {
+                "id": "host_management_account_create",
+                "name": "Host Management Account Create",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_management_account_create",
+                "state": "COMPLETED",
+                "start_time": 1594843581001,
+                "end_time": 1594843581189
+            },
+            {
+                "id": "host_add_into_inventory",
+                "name": "Host Add Into Cluster",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.host_add_into_inventory",
+                "state": "COMPLETED",
+                "start_time": 1594843581342,
+                "end_time": 1594843581470
+            },
+            {
+                "id": "vxm_move_to_vsan",
+                "name": "VxRail Manager Move to vSAN Datastore",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_computer.vxm_move_to_vsan",
+                "state": "COMPLETED",
+                "start_time": 1594843581615,
+                "end_time": 1594843581793
+            },
+            {
+                "id": "host_add_to_vds",
+                "name": "Host Add Into VDS",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_network.host_add_to_vds",
+                "state": "COMPLETED",
+                "start_time": 1594843582158,
+                "end_time": 1594843582287
+            },
+            {
+                "id": "host_assign_standby_pnic_to_vds",
+                "name": "Host Assign Standby PNIC to VDS",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_network.host_assign_standby_pnic_to_vds",
+                "state": "COMPLETED",
+                "start_time": 1594843582406,
+                "end_time": 1594843582540
+            },
+            {
+                "id": "host_assign_vmk_to_vds",
+                "name": "Host Assign Vmk to VDS",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_network.host_assign_vmk_to_vds",
+                "state": "COMPLETED",
+                "start_time": 1594843582667,
+                "end_time": 1594843582799
+            },
+            {
+                "id": "vxm_network_vnic_add_to_vds",
+                "name": "VxRail Manager Network vNIC Remove",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_network.vxm_network_vnic_add_to_vds",
+                "state": "COMPLETED",
+                "start_time": 1594843582923,
+                "end_time": 1594843583056
+            },
+            {
+                "id": "host_assign_active_pnic_to_vds",
+                "name": "Host Assign Active PNIC to VDS",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_network.host_assign_active_pnic_to_vds",
+                "state": "COMPLETED",
+                "start_time": 1594843583197,
+                "end_time": 1594843583331
+            },
+            {
+                "id": "host_loudmouth_service_restart",
+                "name": "Host Loudmouth Restart",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_network.host_loudmouth_service_restart",
+                "state": "COMPLETED",
+                "start_time": 1594843583455,
+                "end_time": 1594843583591
+            },
+            {
+                "id": "host_geo_location_configuration",
+                "name": "Host Geography Location Configure",
+                "path": "node_one_bootstrap_with_cns_ready.primary_node_network.host_geo_location_configuration",
+                "state": "COMPLETED",
+                "start_time": 1594843583714,
+                "end_time": 1594843583843
+            },
+            {
+                "id": "node_addition_with_cns_ready.node_addition {8QXWLR2}",
+                "name": "Node Addition Configuration for Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "check_node_status",
+                        "name": "Host Network Status Check",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.check_node_status",
+                        "state": "COMPLETED",
+                        "start_time": 1594843599634,
+                        "end_time": 1594843599778
+                    },
+                    {
+                        "id": "host_election_service_disable",
+                        "name": "Host Election Service Disable",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_election_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843599913,
+                        "end_time": 1594843600051
+                    },
+                    {
+                        "id": "host_network_management_vlan_change",
+                        "name": "Host Management VLAN Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_network_management_vlan_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843600182,
+                        "end_time": 1594843600324
+                    },
+                    {
+                        "id": "host_network_management_ip_change",
+                        "name": "Host Management IP Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_network_management_ip_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843600462,
+                        "end_time": 1594843600607
+                    },
+                    {
+                        "id": "host_hostname_change",
+                        "name": "Host Hostname Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_hostname_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843600737,
+                        "end_time": 1594843600878
+                    },
+                    {
+                        "id": "host_platform_service_ip_update",
+                        "name": "Host Platform Service IP Configuration",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_platform_service_ip_update",
+                        "state": "COMPLETED",
+                        "start_time": 1594843601007,
+                        "end_time": 1594843601149
+                    },
+                    {
+                        "id": "host_platform_service_restart",
+                        "name": "Host Platform Service Restart",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_platform_service_restart",
+                        "state": "COMPLETED",
+                        "start_time": 1594843601280,
+                        "end_time": 1594843601438
+                    },
+                    {
+                        "id": "host_ptagent_ip_change",
+                        "name": "Host PTAgent IP Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_ptagent_ip_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843601572,
+                        "end_time": 1594843601714
+                    },
+                    {
+                        "id": "host_dns_change",
+                        "name": "Host DNS Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_dns_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843601854,
+                        "end_time": 1594843601996
+                    },
+                    {
+                        "id": "host_time_sync",
+                        "name": "Host Time Sync",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_time_sync",
+                        "state": "COMPLETED",
+                        "start_time": 1594843602126,
+                        "end_time": 1594843602268
+                    },
+                    {
+                        "id": "host_unused_system_vms_remove",
+                        "name": "Host Unused System VMs Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_unused_system_vms_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843602400,
+                        "end_time": 1594843602559
+                    },
+                    {
+                        "id": "host_storage_vsan_disk_remove",
+                        "name": "Host Storage vSAN Disk Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_storage_vsan_disk_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843602686,
+                        "end_time": 1594843602833
+                    },
+                    {
+                        "id": "host_storage_leave_vsan",
+                        "name": "Host Storage Leave vSAN",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_storage_leave_vsan",
+                        "state": "COMPLETED",
+                        "start_time": 1594843602965,
+                        "end_time": 1594843603110
+                    },
+                    {
+                        "id": "handle_unexpected_state_node",
+                        "name": "Handle Unexpected State Node",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.handle_unexpected_state_node",
+                        "state": "COMPLETED",
+                        "start_time": 1594843603242,
+                        "end_time": 1594843603383
+                    },
+                    {
+                        "id": "host_add_into_inventory",
+                        "name": "Host Add Into Cluster",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_add_into_inventory",
+                        "state": "COMPLETED",
+                        "start_time": 1594843603531,
+                        "end_time": 1594843603706
+                    },
+                    {
+                        "id": "host_management_account_create",
+                        "name": "Host Management Account Create",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_management_account_create",
+                        "state": "COMPLETED",
+                        "start_time": 1594843603841,
+                        "end_time": 1594843603981
+                    },
+                    {
+                        "id": "host_add_to_vds",
+                        "name": "Host Add Into VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_add_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843604114,
+                        "end_time": 1594843604258
+                    },
+                    {
+                        "id": "host_assign_standby_pnic_to_vds",
+                        "name": "Host Assign Standby PNIC to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_assign_standby_pnic_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843604390,
+                        "end_time": 1594843604544
+                    },
+                    {
+                        "id": "host_assign_vmk_to_vds",
+                        "name": "Host Assign Vmk to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_assign_vmk_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843604690,
+                        "end_time": 1594843604833
+                    },
+                    {
+                        "id": "vxm_network_vnic_add_to_vds",
+                        "name": "VxRail Manager Network vNIC Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.vxm_network_vnic_add_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843604970,
+                        "end_time": 1594843605124
+                    },
+                    {
+                        "id": "host_assign_active_pnic_to_vds",
+                        "name": "Host Assign Active PNIC to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_assign_active_pnic_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843605261,
+                        "end_time": 1594843605413
+                    },
+                    {
+                        "id": "host_loudmouth_service_restart",
+                        "name": "Host Loudmouth Restart",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_loudmouth_service_restart",
+                        "state": "COMPLETED",
+                        "start_time": 1594843605587,
+                        "end_time": 1594843605760
+                    },
+                    {
+                        "id": "host_geo_location_configuration",
+                        "name": "Host Geography Location Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_geo_location_configuration",
+                        "state": "COMPLETED",
+                        "start_time": 1594843605894,
+                        "end_time": 1594843606041
+                    },
+                    {
+                        "id": "host_storage_add_to_vsan",
+                        "name": "Host Storage Join vSAN",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_storage_add_to_vsan",
+                        "state": "COMPLETED",
+                        "start_time": 1594843606176,
+                        "end_time": 1594843606319
+                    },
+                    {
+                        "id": "host_vsan_diskgroups_create",
+                        "name": "Host vSAN Disk Groups Create",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_vsan_diskgroups_create",
+                        "state": "COMPLETED",
+                        "start_time": 1594843606454,
+                        "end_time": 1594843606602
+                    },
+                    {
+                        "id": "host_vsan_storage_policy_configuration",
+                        "name": "Host vSAN Storage Policy Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.2.node_cns.host_vsan_storage_policy_configuration",
+                        "state": "COMPLETED",
+                        "start_time": 1594843606737,
+                        "end_time": 1594843606883
+                    }
+                ]
+            },
+            {
+                "id": "node_addition_with_cns_ready.node_addition {8QXVLR2}",
+                "name": "Node Addition Configuration for Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "check_node_status",
+                        "name": "Host Network Status Check",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.check_node_status",
+                        "state": "COMPLETED",
+                        "start_time": 1594843591964,
+                        "end_time": 1594843592106
+                    },
+                    {
+                        "id": "host_election_service_disable",
+                        "name": "Host Election Service Disable",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_election_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843592234,
+                        "end_time": 1594843592372
+                    },
+                    {
+                        "id": "host_network_management_vlan_change",
+                        "name": "Host Management VLAN Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_network_management_vlan_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843592499,
+                        "end_time": 1594843592633
+                    },
+                    {
+                        "id": "host_network_management_ip_change",
+                        "name": "Host Management IP Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_network_management_ip_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843592762,
+                        "end_time": 1594843592905
+                    },
+                    {
+                        "id": "host_hostname_change",
+                        "name": "Host Hostname Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_hostname_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843593036,
+                        "end_time": 1594843593177
+                    },
+                    {
+                        "id": "host_platform_service_ip_update",
+                        "name": "Host Platform Service IP Configuration",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_platform_service_ip_update",
+                        "state": "COMPLETED",
+                        "start_time": 1594843593314,
+                        "end_time": 1594843593451
+                    },
+                    {
+                        "id": "host_platform_service_restart",
+                        "name": "Host Platform Service Restart",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_platform_service_restart",
+                        "state": "COMPLETED",
+                        "start_time": 1594843593583,
+                        "end_time": 1594843593717
+                    },
+                    {
+                        "id": "host_ptagent_ip_change",
+                        "name": "Host PTAgent IP Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_ptagent_ip_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843593841,
+                        "end_time": 1594843593980
+                    },
+                    {
+                        "id": "host_dns_change",
+                        "name": "Host DNS Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_dns_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843594120,
+                        "end_time": 1594843594260
+                    },
+                    {
+                        "id": "host_time_sync",
+                        "name": "Host Time Sync",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_time_sync",
+                        "state": "COMPLETED",
+                        "start_time": 1594843594400,
+                        "end_time": 1594843594543
+                    },
+                    {
+                        "id": "host_unused_system_vms_remove",
+                        "name": "Host Unused System VMs Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_unused_system_vms_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843594672,
+                        "end_time": 1594843594812
+                    },
+                    {
+                        "id": "host_storage_vsan_disk_remove",
+                        "name": "Host Storage vSAN Disk Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_storage_vsan_disk_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843594941,
+                        "end_time": 1594843595077
+                    },
+                    {
+                        "id": "host_storage_leave_vsan",
+                        "name": "Host Storage Leave vSAN",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_storage_leave_vsan",
+                        "state": "COMPLETED",
+                        "start_time": 1594843595206,
+                        "end_time": 1594843595349
+                    },
+                    {
+                        "id": "handle_unexpected_state_node",
+                        "name": "Handle Unexpected State Node",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.handle_unexpected_state_node",
+                        "state": "COMPLETED",
+                        "start_time": 1594843595480,
+                        "end_time": 1594843595626
+                    },
+                    {
+                        "id": "host_add_into_inventory",
+                        "name": "Host Add Into Cluster",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_add_into_inventory",
+                        "state": "COMPLETED",
+                        "start_time": 1594843595759,
+                        "end_time": 1594843595912
+                    },
+                    {
+                        "id": "host_management_account_create",
+                        "name": "Host Management Account Create",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_management_account_create",
+                        "state": "COMPLETED",
+                        "start_time": 1594843596046,
+                        "end_time": 1594843596188
+                    },
+                    {
+                        "id": "host_add_to_vds",
+                        "name": "Host Add Into VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_add_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843596317,
+                        "end_time": 1594843596462
+                    },
+                    {
+                        "id": "host_assign_standby_pnic_to_vds",
+                        "name": "Host Assign Standby PNIC to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_assign_standby_pnic_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843596593,
+                        "end_time": 1594843596731
+                    },
+                    {
+                        "id": "host_assign_vmk_to_vds",
+                        "name": "Host Assign Vmk to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_assign_vmk_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843596866,
+                        "end_time": 1594843597006
+                    },
+                    {
+                        "id": "vxm_network_vnic_add_to_vds",
+                        "name": "VxRail Manager Network vNIC Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.vxm_network_vnic_add_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843597143,
+                        "end_time": 1594843597283
+                    },
+                    {
+                        "id": "host_assign_active_pnic_to_vds",
+                        "name": "Host Assign Active PNIC to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_assign_active_pnic_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843597415,
+                        "end_time": 1594843597559
+                    },
+                    {
+                        "id": "host_loudmouth_service_restart",
+                        "name": "Host Loudmouth Restart",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_loudmouth_service_restart",
+                        "state": "COMPLETED",
+                        "start_time": 1594843597693,
+                        "end_time": 1594843597847
+                    },
+                    {
+                        "id": "host_geo_location_configuration",
+                        "name": "Host Geography Location Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_geo_location_configuration",
+                        "state": "COMPLETED",
+                        "start_time": 1594843597979,
+                        "end_time": 1594843598140
+                    },
+                    {
+                        "id": "host_storage_add_to_vsan",
+                        "name": "Host Storage Join vSAN",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_storage_add_to_vsan",
+                        "state": "COMPLETED",
+                        "start_time": 1594843598287,
+                        "end_time": 1594843598428
+                    },
+                    {
+                        "id": "host_vsan_diskgroups_create",
+                        "name": "Host vSAN Disk Groups Create",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_vsan_diskgroups_create",
+                        "state": "COMPLETED",
+                        "start_time": 1594843598563,
+                        "end_time": 1594843598712
+                    },
+                    {
+                        "id": "host_vsan_storage_policy_configuration",
+                        "name": "Host vSAN Storage Policy Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.1.node_cns.host_vsan_storage_policy_configuration",
+                        "state": "COMPLETED",
+                        "start_time": 1594843598847,
+                        "end_time": 1594843598997
+                    }
+                ]
+            },
+            {
+                "id": "node_addition_with_cns_ready.node_addition {8QWXLR2}",
+                "name": "Node Addition Configuration for Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "check_node_status",
+                        "name": "Host Network Status Check",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.check_node_status",
+                        "state": "COMPLETED",
+                        "start_time": 1594843584435,
+                        "end_time": 1594843584574
+                    },
+                    {
+                        "id": "host_election_service_disable",
+                        "name": "Host Election Service Disable",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_election_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843584703,
+                        "end_time": 1594843584842
+                    },
+                    {
+                        "id": "host_network_management_vlan_change",
+                        "name": "Host Management VLAN Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_network_management_vlan_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843584967,
+                        "end_time": 1594843585104
+                    },
+                    {
+                        "id": "host_network_management_ip_change",
+                        "name": "Host Management IP Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_network_management_ip_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843585240,
+                        "end_time": 1594843585375
+                    },
+                    {
+                        "id": "host_hostname_change",
+                        "name": "Host Hostname Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_hostname_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843585498,
+                        "end_time": 1594843585640
+                    },
+                    {
+                        "id": "host_platform_service_ip_update",
+                        "name": "Host Platform Service IP Configuration",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_platform_service_ip_update",
+                        "state": "COMPLETED",
+                        "start_time": 1594843585762,
+                        "end_time": 1594843585898
+                    },
+                    {
+                        "id": "host_platform_service_restart",
+                        "name": "Host Platform Service Restart",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_platform_service_restart",
+                        "state": "COMPLETED",
+                        "start_time": 1594843586026,
+                        "end_time": 1594843586166
+                    },
+                    {
+                        "id": "host_ptagent_ip_change",
+                        "name": "Host PTAgent IP Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_ptagent_ip_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843586303,
+                        "end_time": 1594843586437
+                    },
+                    {
+                        "id": "host_dns_change",
+                        "name": "Host DNS Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_dns_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843586566,
+                        "end_time": 1594843586702
+                    },
+                    {
+                        "id": "host_time_sync",
+                        "name": "Host Time Sync",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_time_sync",
+                        "state": "COMPLETED",
+                        "start_time": 1594843586832,
+                        "end_time": 1594843586977
+                    },
+                    {
+                        "id": "host_unused_system_vms_remove",
+                        "name": "Host Unused System VMs Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_unused_system_vms_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843587105,
+                        "end_time": 1594843587248
+                    },
+                    {
+                        "id": "host_storage_vsan_disk_remove",
+                        "name": "Host Storage vSAN Disk Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_storage_vsan_disk_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843587374,
+                        "end_time": 1594843587516
+                    },
+                    {
+                        "id": "host_storage_leave_vsan",
+                        "name": "Host Storage Leave vSAN",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_storage_leave_vsan",
+                        "state": "COMPLETED",
+                        "start_time": 1594843587645,
+                        "end_time": 1594843587786
+                    },
+                    {
+                        "id": "handle_unexpected_state_node",
+                        "name": "Handle Unexpected State Node",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.handle_unexpected_state_node",
+                        "state": "COMPLETED",
+                        "start_time": 1594843587916,
+                        "end_time": 1594843588057
+                    },
+                    {
+                        "id": "host_add_into_inventory",
+                        "name": "Host Add Into Cluster",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_add_into_inventory",
+                        "state": "COMPLETED",
+                        "start_time": 1594843588185,
+                        "end_time": 1594843588326
+                    },
+                    {
+                        "id": "host_management_account_create",
+                        "name": "Host Management Account Create",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_management_account_create",
+                        "state": "COMPLETED",
+                        "start_time": 1594843588457,
+                        "end_time": 1594843588606
+                    },
+                    {
+                        "id": "host_add_to_vds",
+                        "name": "Host Add Into VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_add_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843588736,
+                        "end_time": 1594843588877
+                    },
+                    {
+                        "id": "host_assign_standby_pnic_to_vds",
+                        "name": "Host Assign Standby PNIC to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_assign_standby_pnic_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843589007,
+                        "end_time": 1594843589148
+                    },
+                    {
+                        "id": "host_assign_vmk_to_vds",
+                        "name": "Host Assign Vmk to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_assign_vmk_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843589278,
+                        "end_time": 1594843589418
+                    },
+                    {
+                        "id": "vxm_network_vnic_add_to_vds",
+                        "name": "VxRail Manager Network vNIC Remove",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.vxm_network_vnic_add_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843589550,
+                        "end_time": 1594843589690
+                    },
+                    {
+                        "id": "host_assign_active_pnic_to_vds",
+                        "name": "Host Assign Active PNIC to VDS",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_assign_active_pnic_to_vds",
+                        "state": "COMPLETED",
+                        "start_time": 1594843589823,
+                        "end_time": 1594843589960
+                    },
+                    {
+                        "id": "host_loudmouth_service_restart",
+                        "name": "Host Loudmouth Restart",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_loudmouth_service_restart",
+                        "state": "COMPLETED",
+                        "start_time": 1594843590088,
+                        "end_time": 1594843590238
+                    },
+                    {
+                        "id": "host_geo_location_configuration",
+                        "name": "Host Geography Location Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_geo_location_configuration",
+                        "state": "COMPLETED",
+                        "start_time": 1594843590367,
+                        "end_time": 1594843590509
+                    },
+                    {
+                        "id": "host_storage_add_to_vsan",
+                        "name": "Host Storage Join vSAN",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_storage_add_to_vsan",
+                        "state": "COMPLETED",
+                        "start_time": 1594843590643,
+                        "end_time": 1594843590780
+                    },
+                    {
+                        "id": "host_vsan_diskgroups_create",
+                        "name": "Host vSAN Disk Groups Create",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_vsan_diskgroups_create",
+                        "state": "COMPLETED",
+                        "start_time": 1594843590910,
+                        "end_time": 1594843591090
+                    },
+                    {
+                        "id": "host_vsan_storage_policy_configuration",
+                        "name": "Host vSAN Storage Policy Configure",
+                        "path": "node_addition_with_cns_ready.node_addition.0.node_cns.host_vsan_storage_policy_configuration",
+                        "state": "COMPLETED",
+                        "start_time": 1594843591221,
+                        "end_time": 1594843591366
+                    }
+                ]
+            },
+            {
+                "id": "vc_licensing",
+                "name": "vCenter License Apply",
+                "path": "specific_internal_vc_cluster_finalization.internal.internal_vc_boot_up.internal_vc_cluster_finalization.vc_licensing",
+                "state": "COMPLETED",
+                "start_time": 1594843607995,
+                "end_time": 1594843608185
+            },
+            {
+                "id": "vc_guest_ops_alias",
+                "name": "vCenter Guest Alias Bind",
+                "path": "specific_internal_vc_cluster_finalization.internal.internal_vc_boot_up.internal_vc_cluster_finalization.vc_guest_ops_alias",
+                "state": "COMPLETED",
+                "start_time": 1594843608372,
+                "end_time": 1594843608584
+            },
+            {
+                "id": "vc_password_expiration_disable",
+                "name": "vCenter Password Expiration Disable",
+                "path": "specific_internal_vc_cluster_finalization.internal.internal_vc_boot_up.internal_vc_cluster_finalization.vc_password_expiration_disable",
+                "state": "COMPLETED",
+                "start_time": 1594843608743,
+                "end_time": 1594843608905
+            },
+            {
+                "id": "cluster_storage_policy_create",
+                "name": "vCenter Storage Policy Create",
+                "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.cluster_storage_policy_create",
+                "state": "COMPLETED",
+                "start_time": 1594843609421,
+                "end_time": 1594843609575
+            },
+            {
+                "id": "cluster_evc_enable",
+                "name": "Cluster EVC Enable",
+                "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.cluster_evc_enable",
+                "state": "COMPLETED",
+                "start_time": 1594843609719,
+                "end_time": 1594843609870
+            },
+            {
+                "id": "cluster_system_vm_storage_policy_apply",
+                "name": "Cluster System VM Storage Policy Configure",
+                "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.cluster_system_vm_storage_policy_apply",
+                "state": "COMPLETED",
+                "start_time": 1594843610006,
+                "end_time": 1594843610249
+            },
+            {
+                "id": "cluster_drs_enable",
+                "name": "Cluster DRS Configure",
+                "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.cluster_drs_enable",
+                "state": "COMPLETED",
+                "start_time": 1594843610400,
+                "end_time": 1594843610565
+            },
+            {
+                "id": "cluster_high_availability_enable",
+                "name": "Cluster HA Enable",
+                "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.cluster_high_availability_enable",
+                "state": "COMPLETED",
+                "start_time": 1594843610728,
+                "end_time": 1594843610918
+            },
+            {
+                "id": "cluster_das_config",
+                "name": "Cluster DAS Configure",
+                "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.cluster_das_config",
+                "state": "COMPLETED",
+                "start_time": 1594843611067,
+                "end_time": 1594843611227
+            },
+            {
+                "id": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure {8QXWLR2}",
+                "name": "Finalization on Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "host_logging_system_configure",
+                        "name": "Host Logging System Configure",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.3.host_logging_system_configure",
+                        "state": "COMPLETED",
+                        "start_time": 1594843615257,
+                        "end_time": 1594843615413
+                    },
+                    {
+                        "id": "host_security_service_disable",
+                        "name": "Host Security Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.3.host_security_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843615562,
+                        "end_time": 1594843615718
+                    },
+                    {
+                        "id": "host_proxy_service_disable",
+                        "name": "Host Proxy Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.3.host_proxy_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843615858,
+                        "end_time": 1594843616031
+                    }
+                ]
+            },
+            {
+                "id": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure {8QXVLR2}",
+                "name": "Finalization on Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "host_logging_system_configure",
+                        "name": "Host Logging System Configure",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.2.host_logging_system_configure",
+                        "state": "COMPLETED",
+                        "start_time": 1594843614101,
+                        "end_time": 1594843614257
+                    },
+                    {
+                        "id": "host_security_service_disable",
+                        "name": "Host Security Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.2.host_security_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843614395,
+                        "end_time": 1594843614554
+                    },
+                    {
+                        "id": "host_proxy_service_disable",
+                        "name": "Host Proxy Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.2.host_proxy_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843614699,
+                        "end_time": 1594843614852
+                    }
+                ]
+            },
+            {
+                "id": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure {8QWZHQ2}",
+                "name": "Finalization on Host 8QWZHQ2",
+                "steps": [
+                    {
+                        "id": "host_logging_system_configure",
+                        "name": "Host Logging System Configure",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.1.host_logging_system_configure",
+                        "state": "COMPLETED",
+                        "start_time": 1594843612945,
+                        "end_time": 1594843613100
+                    },
+                    {
+                        "id": "host_security_service_disable",
+                        "name": "Host Security Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.1.host_security_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843613245,
+                        "end_time": 1594843613402
+                    },
+                    {
+                        "id": "host_proxy_service_disable",
+                        "name": "Host Proxy Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.1.host_proxy_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843613550,
+                        "end_time": 1594843613705
+                    }
+                ]
+            },
+            {
+                "id": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure {8QWXLR2}",
+                "name": "Finalization on Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "host_logging_system_configure",
+                        "name": "Host Logging System Configure",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.0.host_logging_system_configure",
+                        "state": "COMPLETED",
+                        "start_time": 1594843611674,
+                        "end_time": 1594843611836
+                    },
+                    {
+                        "id": "host_security_service_disable",
+                        "name": "Host Security Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.0.host_security_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843612002,
+                        "end_time": 1594843612207
+                    },
+                    {
+                        "id": "host_proxy_service_disable",
+                        "name": "Host Proxy Service Disable",
+                        "path": "vsphere_cluster_finalization.vsphere_cluster_finalization.nodes_finalization_configure.0.host_proxy_service_disable",
+                        "state": "COMPLETED",
+                        "start_time": 1594843612356,
+                        "end_time": 1594843612523
+                    }
+                ]
+            },
+            {
+                "id": "vc_certs_generate",
+                "name": "vCenter Certification Generate",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.vc_certs_generate",
+                "state": "COMPLETED",
+                "start_time": 1594843616711,
+                "end_time": 1594843616873
+            },
+            {
+                "id": "vxm_hostname_set",
+                "name": "VxRail Manager Host Name Configuration",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.vxm_hostname_set",
+                "state": "COMPLETED",
+                "start_time": 1594843617012,
+                "end_time": 1594843617170
+            },
+            {
+                "id": "vxm_evo_password",
+                "name": "VxRail Manager Account Configuration",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.vxm_evo_password",
+                "state": "COMPLETED",
+                "start_time": 1594843617310,
+                "end_time": 1594843617463
+            },
+            {
+                "id": "vxm_configuration_data_populate",
+                "name": "VxRail Manager Configuration Data Populate",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.vxm_configuration_data_populate",
+                "state": "COMPLETED",
+                "start_time": 1594843617606,
+                "end_time": 1594843617763
+            },
+            {
+                "id": "reset_vsphere_alarm",
+                "name": "Reset vCenter Alarm Status",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.reset_vsphere_alarm",
+                "state": "COMPLETED",
+                "start_time": 1594843617909,
+                "end_time": 1594843618072
+            },
+            {
+                "id": "ome_integration",
+                "name": "Set VxRail Manager IP for Open Manager",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.ome_integration",
+                "state": "COMPLETED",
+                "start_time": 1594843618223,
+                "end_time": 1594843618388
+            },
+            {
+                "id": "post_dayone_configuration",
+                "name": "Post Dayone Configuration",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.post_dayone_configuration",
+                "state": "COMPLETED",
+                "start_time": 1594843618549,
+                "end_time": 1594843618715
+            },
+            {
+                "id": "lockbox_reinitialize",
+                "name": "Lockbox Reinitialization",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.lockbox_reinitialize",
+                "state": "COMPLETED",
+                "start_time": 1594843618870,
+                "end_time": 1594843619046
+            },
+            {
+                "id": "vxm_network_vnic_remove",
+                "name": "VxRail Manager Network vNIC Remove",
+                "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.vxm_network_vnic_remove",
+                "state": "COMPLETED",
+                "start_time": 1594843619206,
+                "end_time": 1594843619378
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove {8QXWLR2}",
+                "name": "VxRail Cluster Finalization for Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "host_vss_remove",
+                        "name": "Host VSS Remove",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove.3.host_vss_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843621691,
+                        "end_time": 1594843621867
+                    }
+                ]
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove {8QXVLR2}",
+                "name": "VxRail Cluster Finalization for Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "host_vss_remove",
+                        "name": "Host VSS Remove",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove.2.host_vss_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843621081,
+                        "end_time": 1594843621247
+                    }
+                ]
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove {8QWZHQ2}",
+                "name": "VxRail Cluster Finalization for Host 8QWZHQ2",
+                "steps": [
+                    {
+                        "id": "host_vss_remove",
+                        "name": "Host VSS Remove",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove.1.host_vss_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843620451,
+                        "end_time": 1594843620641
+                    }
+                ]
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove {8QWXLR2}",
+                "name": "VxRail Cluster Finalization for Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "host_vss_remove",
+                        "name": "Host VSS Remove",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_vss_remove.0.host_vss_remove",
+                        "state": "COMPLETED",
+                        "start_time": 1594843619825,
+                        "end_time": 1594843620007
+                    }
+                ]
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change {8QXWLR2}",
+                "name": "Change Password for Host 8QXWLR2",
+                "steps": [
+                    {
+                        "id": "host_root_account_password_change",
+                        "name": "Host Root Account Password Configure",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change.3.host_root_account_password_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843624460,
+                        "end_time": 1594843624642
+                    }
+                ]
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change {8QXVLR2}",
+                "name": "Change Password for Host 8QXVLR2",
+                "steps": [
+                    {
+                        "id": "host_root_account_password_change",
+                        "name": "Host Root Account Password Configure",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change.2.host_root_account_password_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843623850,
+                        "end_time": 1594843624031
+                    }
+                ]
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change {8QWZHQ2}",
+                "name": "Change Password for Host 8QWZHQ2",
+                "steps": [
+                    {
+                        "id": "host_root_account_password_change",
+                        "name": "Host Root Account Password Configure",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change.1.host_root_account_password_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843623234,
+                        "end_time": 1594843623406
+                    }
+                ]
+            },
+            {
+                "id": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change {8QWXLR2}",
+                "name": "Change Password for Host 8QWXLR2",
+                "steps": [
+                    {
+                        "id": "host_root_account_password_change",
+                        "name": "Host Root Account Password Configure",
+                        "path": "vxrail_cluster_finalization.vxrail_cluster_finalization.cluster_hosts_root_password_change.0.host_root_account_password_change",
+                        "state": "COMPLETED",
+                        "start_time": 1594843622601,
+                        "end_time": 1594843622784
+                    }
+                ]
+            },
+            {
+                "id": "vxm_system_services_restart",
+                "name": "VxRail Manager System Service Restart",
+                "path": "vxm_system_services_restart",
+                "state": "COMPLETED",
+                "start_time": 1594843625231,
+                "end_time": 1594843625397
+            },
+            {
+                "id": "vxm_update_certification",
+                "name": "Update VxRail Manager SSL Certification",
+                "path": "vxm_update_certification",
+                "state": "COMPLETED",
+                "start_time": 1594843625555,
+                "end_time": 1594843625727
+            }
+        ]
+    },
+    "step": "Update VxRail Manager SSL Certification",
+    "progress": 100,
+    "detail": "",
+    "error": "",
+    "start_time": 1594843313436,
+    "end_time": 1594843625909
+}

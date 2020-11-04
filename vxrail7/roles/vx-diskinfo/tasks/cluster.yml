@@ -1,0 +1,13 @@
+---
+# Use the VxRail API to get cluster status
+ -  name: Get disk list
+    dellemc.vxrail.vx_diskinfo:
+     ip: "{{vxm}}"
+     vcadmin: "{{vcadmin}}"
+     vcpasswd: "{{vcpasswd}}"
+     failed: "{{failed}}"
+    register: vx_facts
+
+ - name: "Display Disk Information"
+   debug:
+     msg: "{{ vx_facts }}"

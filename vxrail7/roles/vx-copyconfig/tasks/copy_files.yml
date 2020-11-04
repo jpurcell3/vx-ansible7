@@ -1,0 +1,18 @@
+---
+# tasks file for lcm
+# Copying the Upgrade Bundle
+- name: "Copy VxRail Bundle to VxM Server"
+  copy:
+   src:  "{{ bundle }}"
+   dest: /tmp/{{ bundle }}
+  become: yes
+- name: Copy lcm_advancedproperties
+  copy:
+   src:  lcm_advanced_mode.properties
+   dest: /var/lib/vmware-marvin/lcm_advanced_mode.properties
+  become: yes
+- name: "Copy disk_expansion script to VxRail Manager"
+  copy:
+   src:  disk_space_expansion.py
+   dest: /root/disk_space_expansion.py
+  become: yes

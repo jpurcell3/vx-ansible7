@@ -1,0 +1,32 @@
+---
+# tasks file for host information
+ - name: Get Hosts Details
+   dellemc.vxrail.vx_callhome:
+     ip: "{{ vxm }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+   register: dict
+
+
+{
+  "admin_pwd": "Testvxrail123!",
+  "company": "EMC CORP-PARTNER",
+  "email": "vxrail.test@emconlinesupport.com",
+  "first_name": "VxRail",
+  "ip": "10.62.83.114",
+  "last_name": "emc",
+  "phone": "1508435-1000",
+  "root_pwd": "password123!",
+  "site_id": 11145366
+}
+Parameter content type
+
+
+
+
+
+
+
+
+ - debug:
+     msg: "{{ dict }}"

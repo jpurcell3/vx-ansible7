@@ -1,0 +1,13 @@
+---
+# vars file for add-node---
+# Use the VxRail API to get cluster status
+vcadmin: administrator@vsphere.local
+vcpasswd: VMw@re123!
+vxm: 172.17.0.10
+esxhost: mgt-esx06.lab4.local
+vxadmin: vxadmin
+vxpasswd: VMw@re123!
+esx_mgt: 172.17.0.16
+esx_vsan: 172.17.1.16
+esx_vmotion: 172.17.2.16
+root_passwd: VMw@re123!

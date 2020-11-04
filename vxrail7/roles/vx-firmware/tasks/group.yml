@@ -1,0 +1,20 @@
+---
+# Use the VxRail API to get cluster status
+ - name: "Retrieve VxRail Cluster Health"
+   dellemc.vxrail.vx_firmware:
+     ip: "{{ item }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+   register: vx
+   loop: "{{ grp }}"
+     
+ - name: set facts
+   set_fact:
+       status:  "{{ status | default([]) + [{'VxRail': item.item, 'FW': item.ansible_facts}] }}"
+   loop: "{{ vx.results }}"
+   no_log: true
+
+ - debug:
+#     msg: "{{ vx.results }}"
+     var: status
+     

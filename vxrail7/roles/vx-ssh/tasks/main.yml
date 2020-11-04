@@ -1,0 +1,15 @@
+---
+# Copying the sshd_config file
+# Dependencies: Ansible relies upon SSH to perform management tasks
+#	- Either disable ssh key checking by setting the following value in /etc/ansible.cfg: "host_key_checking = False"
+#          Or ssh to the host and accept the prompt to create a known_hosts entry fo the hosts public key. 
+#        - The host must have an entry in the /etc/hosts or DNS and the /etc/ansible/hosts file 
+#
+- name: "Enable SSH on VxRail Manager"
+  copy:
+   src: sshd_config
+   dest: /etc/ssh/sshd_config
+  register: config_ssh_output
+  become: yes
+  notify:
+   - restart sshd

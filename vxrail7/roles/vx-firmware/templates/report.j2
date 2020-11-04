@@ -1,0 +1,19 @@
+{{'"%s", "%s", "%s", "%s", "%s"' | format("Host Section", "Firmware Name", "Version", "Hostname", "Data") }}
+{% set section = 'platform' %}
+{% set test = 'type' %}
+{% for i in play_hosts %}
+{% if hostvars[i]['in_aws'] is defined and hostvars[i]['in_aws']['rc'] == 0 %}
+{{'"%s", "%s", "%s", "%s", "%s"' | format(section, test, "False", i, "AWS instance") }}
+{% elif hostvars[i]['dell_hardware'] is defined and hostvars[i]['dell_hardware']['rc'] == 0 %}
+{{'"%s", "%s", "%s", "%s", "%s"' | format(section, test, "False", i, "Dell hardware") }}
+{% else %}
+{{'"%s", "%s", "%s", "%s", "%s"' | format(section, test, "True", i, "UNKNOWN/UNREACHABLE") }}
+{% endif %}
+{% endfor %}
+{% set section = 'bios' %}
+{% set test = 'Power Mode' %}
+{% for i in play_hosts | sort %}
+{% if hostvars[i]['bios_power'] is defined and "skipped" not hostvars[i]['bios_power'] %}
+{{'"%s", "%s", "%s", "%s", "%s"' | format(section, test, hostvars[i]['bios_power']['changed'], i, hostvars[i]['bios_power']['stdout'].strip(' \t\n\r')) }}
+{% endif %}
+{% endfor %}

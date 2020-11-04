@@ -1,0 +1,12 @@
+---
+- name: Get the VxRail host health"
+  hosts: localhost
+  gather_facts: no
+  vars:
+    - grp:  "{{ groups['vxrail'] }}"
+    - no_logging: no
+
+  collections:
+   - dellemc.vxrail
+  roles:
+  - vx-clusterinfo

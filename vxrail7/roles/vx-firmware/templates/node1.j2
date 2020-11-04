@@ -1,0 +1,6 @@
+{% for dict_item in node1 % }
+   {% for key, value in dict_item.items() %}
+      <h1>Key:  {{key}}</h1>
+      <h2>Value:  {{value}}</h2>
+   {% endfor %}
+{% endfor %}

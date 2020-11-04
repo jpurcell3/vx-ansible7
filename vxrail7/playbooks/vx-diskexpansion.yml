@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  vars:
+    fname: disk_space_expansion.py
+  tasks:
+  - name: Copy epxansion file to VxRail VM
+    copy:
+      src: /files/{{ fname }}
+      dest: /tmp/{{ fname }}
+    become: yes
+    register: results
+
+  - debug:
+      msg: "FileCopy: {{results}}"
+
+- hosts: "{{vxm}}"
+  tasks:
+  - name: Initiate disk expansion on VxRail Manager
+    script: /tmp/disk_space_expansion.py -c {{vcenter}} -u {{vcadmin}} -p {{vcpasswd}}
+    become: yes

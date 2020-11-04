@@ -1,0 +1,83 @@
+2020-06-18 15:13:33,010 [INFO]	[{'id': '4QNH9N20000000-01-01', 'slot': 1, 'model': 'VxRail E560', 'serial_number': '4QNH9N2', 'appliance_id': '4QNH9N20000000', 'is_primary_node': False, 'cluster_affinity': False, 'ip_set': {}, 'discovered_date': 1592507410983, 'bios_uuid': '4c4c4544-0051-4e10-8048-b4c04f394e32'}, {'id': '4QNK9N20000000-01-01', 'slot': 1, 'model': 'VxRail E560', 'serial_number': '4QNK9N2', 'appliance_id': '4QNK9N20000000', 'is_primary_node': False, 'cluster_affinity': False, 'ip_set': {}, 'discovered_date': 1592507411001, 'bios_uuid': '4c4c4544-0051-4e10-804b-b4c04f394e32'}]
+2020-06-18 15:13:33,010 [INFO]	completed get_nodes function
+2020-06-18 15:13:33,010 [INFO]	Checking Node compatibility...
+2020-06-18 15:13:38,785 [INFO]	[{'id': '4QNK9N20000000-01-01', 'model': 'VxRail E560', 'serial_number': '4QNK9N2', 'system_version': {'version': '4.7.300', 'build': '26108987'}, 'appliance_id': '4QNK9N20000000', 'compatible_status': 'COMPATIBLE', 'compatible_messages': [], 'incompatible_components': []}, {'id': '4QNH9N20000000-01-01', 'model': 'VxRail E560', 'serial_number': '4QNH9N2', 'system_version': {'version': '4.7.300', 'build': '26108987'}, 'appliance_id': '4QNH9N20000000', 'compatible_status': 'COMPATIBLE', 'compatible_messages': [], 'incompatible_components': []}]
+2020-06-18 15:13:38,785 [INFO]	Node 4QNK9N20000000-01-01 added to compatible nodes list.
+2020-06-18 15:13:38,785 [INFO]	['4QNK9N20000000-01-01']
+2020-06-18 15:13:38,786 [INFO]	{'id': '4QNK9N20000000-01-01', 'model': 'VxRail E560', 'serial_number': '4QNK9N2', 'system_version': {'version': '4.7.300', 'build': '26108987'}, 'appliance_id': '4QNK9N20000000', 'compatible_status': 'COMPATIBLE', 'compatible_messages': [], 'incompatible_components': []}
+2020-06-18 15:13:38,786 [INFO]	Node 4QNH9N20000000-01-01 added to compatible nodes list.
+2020-06-18 15:13:38,786 [INFO]	['4QNK9N20000000-01-01', '4QNH9N20000000-01-01']
+2020-06-18 15:13:38,786 [INFO]	{'id': '4QNH9N20000000-01-01', 'model': 'VxRail E560', 'serial_number': '4QNH9N2', 'system_version': {'version': '4.7.300', 'build': '26108987'}, 'appliance_id': '4QNH9N20000000', 'compatible_status': 'COMPATIBLE', 'compatible_messages': [], 'incompatible_components': []}
+2020-06-18 15:13:38,786 [INFO]	completed compatibility validation...
+2020-06-18 15:13:38,786 [INFO]	['4QNK9N20000000-01-01', '4QNH9N20000000-01-01']
+2020-06-18 15:13:38,786 [INFO]	VxRail Node inventory completed.
+2020-06-18 15:13:38,786 [INFO]	The following nodes are available for cluster expansion -->: ['4QNK9N20000000-01-01', '4QNH9N20000000-01-01'].
+2020-06-18 15:13:38,786 [INFO]	node_check: 4QNH9N20000000-01-01 will be used for expansion
+2020-06-18 15:13:38,786 [INFO]	node_check: {'advanced_mode': True, 'hosts': [{'id': '4QNH9N20000000-01-01', 'hostname': 'mgt-esx06.lab4.local', 'network': {'management_ip': '172.17.0.16', 'vmotion_ip': '172.17.2.16', 'vsan_ip': '172.17.1.16'}, 'management': {'username': 'vxadmin', 'password': 'VMw@re123!', 'passwordConfirm': 'VMw@re123!'}, 'root_password': 'VMw@re123!'}], 'vcenter': {'username': 'administrator@vsphere.local', 'password': 'VMw@re123!'}, 'network': {'management': [], 'vmotion': [], 'vsan': []}}.
+2020-06-18 15:13:41,088 [INFO]	HTTP Response ID 202.
+2020-06-18 15:13:41,088 [INFO]	Pre-validation task started with request id: 7.
+2020-06-18 15:13:41,088 [INFO]	node_check: VxRail task id: 7.
+2020-06-18 15:13:41,088 [INFO]	Checking to see if we have what we need for the deployment...
+2020-06-18 15:13:41,653 [INFO]	Current Status: IN_PROGRESS
+2020-06-18 15:13:51,663 [INFO]	expansion_validation: Sleeping 60 seconds before checking for status...
+2020-06-18 15:14:52,427 [INFO]	Current Status: IN_PROGRESS
+2020-06-18 15:15:02,437 [INFO]	expansion_validation: Sleeping 60 seconds before checking for status...
+2020-06-18 15:16:03,171 [INFO]	Current Status: COMPLETED
+2020-06-18 15:16:03,171 [INFO]	Node validation has completed
+2020-06-18 15:16:03,171 [INFO]	expansion_validation: Sleeping 60 seconds before checking for status...
+2020-06-18 15:17:03,220 [INFO]	Starting One Host expansion...
+2020-06-18 15:17:03,978 [INFO]	expansion_validation: vxrail task_ID: 8.
+2020-06-18 15:17:03,978 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:18:04,785 [INFO]	200
+2020-06-18 15:18:04,785 [INFO]	Percent completed: 20
+2020-06-18 15:18:04,785 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:18:04,785 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:18:14,796 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:18:14,796 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:19:15,536 [INFO]	200
+2020-06-18 15:19:15,536 [INFO]	Percent completed: 23
+2020-06-18 15:19:15,536 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:19:15,536 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:19:25,547 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:19:25,547 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:20:26,243 [INFO]	200
+2020-06-18 15:20:26,244 [INFO]	Percent completed: 66
+2020-06-18 15:20:26,244 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:20:26,244 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:20:36,254 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:20:36,254 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:21:37,014 [INFO]	200
+2020-06-18 15:21:37,014 [INFO]	Percent completed: 74
+2020-06-18 15:21:37,014 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:21:37,014 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:21:47,024 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:21:47,025 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:22:47,803 [INFO]	200
+2020-06-18 15:22:47,803 [INFO]	Percent completed: 76
+2020-06-18 15:22:47,803 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:22:47,803 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:22:57,814 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:22:57,814 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:23:58,561 [INFO]	200
+2020-06-18 15:23:58,561 [INFO]	Percent completed: 76
+2020-06-18 15:23:58,561 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:23:58,561 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:24:08,572 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:24:08,572 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:25:09,388 [INFO]	200
+2020-06-18 15:25:09,388 [INFO]	Percent completed: 87
+2020-06-18 15:25:09,388 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:25:09,388 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:25:19,399 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:25:19,399 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:26:20,165 [INFO]	200
+2020-06-18 15:26:20,166 [INFO]	Percent completed: 100
+2020-06-18 15:26:20,166 [INFO]	Expansion Status: IN_PROGRESS
+2020-06-18 15:26:20,166 [INFO]	Inner track_expansion method: IN_PROGRESS
+2020-06-18 15:26:30,177 [INFO]	node_expansion: track_expansion status: IN_PROGRESS
+2020-06-18 15:26:30,177 [INFO]	node_expansion: sleeping 60 seconds...
+2020-06-18 15:27:30,908 [INFO]	200
+2020-06-18 15:27:30,908 [INFO]	Percent completed: 102
+2020-06-18 15:27:30,908 [INFO]	Expansion Status: COMPLETED
+2020-06-18 15:27:30,908 [INFO]	The Cluster expansion has completed
+2020-06-18 15:27:30,909 [INFO]	node_expansion: track_expansion status: COMPLETED

@@ -1,0 +1,9 @@
+---
+# tasks file for lcm
+# Copying the Upgrade Bundle
+- name: "Copy individual file to /tmp"
+  copy:
+   src:  "{{ fname }}"
+   dest: /tmp/{{ fname }}
+  become: yes
+

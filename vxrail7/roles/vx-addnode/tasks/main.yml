@@ -1,0 +1,18 @@
+---
+# Use the VxRail API to get cluster status
+ -  name: "Add Node to Cluster"
+    dellemc.vxrail.vx_addnode:
+      vcadmin: "{{ vcadmin }}"
+      vcpasswd: "{{ vcpasswd }}"
+      ip: "{{ vxm }}"
+      esxhost: "{{ esxhost }}"
+      vxuser: "{{ vxadmin }}"
+      vxpasswd: "{{ vxpasswd }}"
+      mgt_ip: "{{ mgt_ip }}"
+      vsan_ip: "{{ vsan_ip }}"
+      vmotion_ip: "{{ vmotion_ip }}"
+      root_passwd: "{{ root_passwd }}"
+    register: output
+
+ - debug:
+     msg: "{{ output }}"

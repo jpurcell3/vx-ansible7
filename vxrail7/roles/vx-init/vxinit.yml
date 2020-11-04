@@ -1,0 +1,5 @@
+---
+- name: Perform a VxRail First Run Deployment
+  hosts: localhost
+  roles:
+  - vx-init

@@ -1,0 +1,6 @@
+---
+- hosts: "{{vxm}}"
+  collections:
+  - dellemc.vxrail
+  roles: 
+    - copyfile

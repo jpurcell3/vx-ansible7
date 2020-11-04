@@ -1,0 +1,22 @@
+---
+# Use the VxRail API to get cluster status
+- name: "Get VxRail Host Health Status"
+  uri:
+    url: "https://{{ item }}/rest/vxm/v1/system"
+    headers:
+     "Content-Type": "application/json"
+     "Accept": "application/json"
+     "Cache-Control": "no-cache"
+    body_format: json
+    return_content: yes
+    user: "{{ vc_admin }}"
+    password: "{{ vc_password }}"
+    force_basic_auth: yes
+    validate_certs: no
+    status_code: 200
+  register: health_status
+  loop: "{{ vxrail_hosts }}"
+
+- name: "Print the results"
+  debug:
+    msg: "{{ health_status.results[0].content }}"

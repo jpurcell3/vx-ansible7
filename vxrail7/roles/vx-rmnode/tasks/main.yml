@@ -1,0 +1,15 @@
+---
+# tasks file for remove-node---
+# Use the VxRail API to get cluster status
+ -  name: "Test Report"
+    dellemc.vxrail.vx_rmnode:
+      ip: "{{ vxm }}"
+      vcadmin: "{{ vcadmin }}"
+      vcpasswd: "{{ vcpasswd }}"
+      esxhost: "{{ host }}"
+      vcroot: "{{ vcroot }}"
+      vcrootpasswd: "{{ vcrootpasswd }}"
+    register: output
+
+ - debug:
+     msg: "{{ output }}"

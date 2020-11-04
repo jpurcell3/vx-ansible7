@@ -1,0 +1,7 @@
+---
+ - name: Collect Free Nodes
+   hosts: localhost
+   collections:
+   - dellemc.vxrail
+   roles: 
+      - vx-hostinfo

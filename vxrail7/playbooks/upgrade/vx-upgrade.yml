@@ -1,0 +1,83 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+   uuids: []
+  collections:
+  - vmware
+  tasks:
+  - name: Maint Mode test
+    vmware_vm_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vm_info
+
+  - set_fact:
+      uuids:  "{{ uuids + [item.uuid] }}"
+    with_items:
+      - "{{ vm_info.virtual_machines }}"
+
+  - debug:
+      msg: "{{ uuids }}"
+
+  - name: Create VM Snapshot
+    vmware_guest_snapshot:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      datacenter: "{{ datacenter_name }}"
+      uuid: "{{ item }}"
+      state: present
+      snapshot_name: pre-upgrade
+      description: "pre-upgrade"
+      validate_certs: false
+    delegate_to: localhost
+    with_items: "{{ uuids }}"
+
+- hosts: "{{ vxm }}"
+  collections:
+  - dellemc.vxrail
+  tasks:
+  - include_role:
+      name: vx-copyconfig
+
+- hosts: localhost
+  collections:
+  - vmware
+  tasks:
+  - name: Maint Mode test
+    vmware_maintenancemode:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      esxi_hostname: "{{ esx_mgt }}"
+      vsan: ensureObjectAccessibility
+      evacuate: yes
+      timeout: 3600
+      validate_certs: false
+      state: present
+    delegate_to: localhost
+
+  - name: Disabled Maintenance Mode on host
+    vmware_maintenancemode:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      esxi_hostname: "{{ esx_mgt }}"
+      vsan: ensureObjectAccessibility
+      evacuate: yes
+      timeout: 3600
+      validate_certs: false
+      state: absent 
+    delegate_to: localhost
+
+- hosts: localhost
+  collections:
+  - dellemc.vxrail
+  tasks:
+  - include_role:
+      name: vx-upgrade
+    tags: upgrade

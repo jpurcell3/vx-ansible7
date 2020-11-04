@@ -1,0 +1,7 @@
+---
+- name: Get Node Firmware
+  hosts: control
+  collections:
+  - dellemc.vxrail
+  roles:
+  - vx-addnode

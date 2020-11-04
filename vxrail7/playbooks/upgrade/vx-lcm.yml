@@ -1,0 +1,22 @@
+---
+- hosts: "{{vxm}}"
+  collections:
+  - dellemc.vxrail
+  tasks:
+  - include_role:
+      name: vx-copyconfig
+
+#- hosts: "{{vxm}}"
+#  tasks:
+#  - name: Initiate disk expansion on VxRail Manager
+#    script: /root/disk_space_expansion.py -c {{vcenter}} -u {{vcadmin}} -p {{vcpasswd}}
+#    become: yes
+
+- hosts: localhost
+  collections:
+  - dellemc.vxrail
+  tasks:
+  - include_role:
+#      name: vcmode
+#      name: vx-intlcm
+      name: vx-upgrade

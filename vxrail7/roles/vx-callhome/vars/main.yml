@@ -1,0 +1,5 @@
+---
+# vars file for health inquiry
+vxm: mgt-vxm.lab4.local
+vcadmin: administrator@vsphere.local
+vcpasswd: VMw@re123!

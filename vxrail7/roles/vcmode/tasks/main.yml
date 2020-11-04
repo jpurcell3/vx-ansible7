@@ -1,0 +1,13 @@
+---
+# Use the VxRail API to Convert vCenter
+ -  name: Executing VxRail Module...
+    dellemc.vxrail.vcmode:
+     ip: "{{ vxm }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+     mode: "external"
+    register: vx_facts
+
+ - name: "Display Results"
+   debug:
+     msg: "{{ vx_facts }}"

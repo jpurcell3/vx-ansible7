@@ -1,0 +1,13 @@
+---
+- name: Get Node Firmware
+  hosts: localhost
+  gather_facts: no
+  vars:
+    - isgroup: false
+    - grp:  "{{ groups['vxrail'] }}"
+    - no_logging: no
+
+  collections:
+  - dellemc.vxrail
+  roles:
+  - vx-firmware

@@ -1,0 +1,4 @@
+---
+# defaults file for ssh
+vc_admin: administrator@vsphere.local
+vx_password: VMw@re123!

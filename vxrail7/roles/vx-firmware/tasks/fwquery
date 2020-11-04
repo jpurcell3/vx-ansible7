@@ -1,0 +1,29 @@
+---
+   - name: "get vxrail health status"
+     tags:
+      - host1
+     uri:
+       url: "https://{{ vxrail_hosts }}/rest/vxm/v1/hosts"
+       headers:
+        "Content-Type": "application/json"
+        "Accept": "application/json"
+        "Cache-Control": "no-cache"
+       body_format: json
+       return_content: yes
+       user: "{{ vc_admin }}"
+       password: "{{ vc_password }}"
+       force_basic_auth: yes
+       validate_certs: no
+       status_code: 200
+     register: jsondata
+
+   - name: "JSON output from VxRail Host query"
+     #no_log: True
+     set_fact:
+#        node1: "{{ node1|default({}) | combine ( {item.name : item.firmwareInfo}) }}"
+        node1: "{{ jsondata.json | json_query(jmesquery) }}"
+     vars:
+        jmesquery: '[0].[name, firmwareInfo]'
+
+   - name: Host Info
+     debug: var=node1

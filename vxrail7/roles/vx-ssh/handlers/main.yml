@@ -1,0 +1,12 @@
+---
+# handlers file for ssh
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted
+  become: yes
+  register: output
+
+- name: debug output
+  debug:
+    msg: '{{ output }}'

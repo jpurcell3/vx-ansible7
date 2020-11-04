@@ -1,0 +1,38 @@
+---
+- name: Get Task Detail
+  hosts: control
+  gather_facts: false
+  vars:
+    vxrail_hosts: "{{vxm}}"
+  tasks:
+   - name: 
+     uri:
+       url: "https://{{ vxrail_hosts }}/rest/vxm/v1/requests/{{id}}"
+       headers:
+        "Content-Type": "application/json"
+        "Accept": "application/json"
+        "Cache-Control": "no-cache"
+       body_format: json
+       return_content: yes
+       user: "{{vcadmin}}"
+       password: "{{vcpasswd}}"
+       force_basic_auth: yes
+       validate_certs: no
+       status_code: 200
+     register: request
+
+   - debug:
+       msg: 
+        - Task: "{{ request.json.detail }}"
+        - State: "{{ request.json.state }}"
+        - Progress: "{{ request.json.progress }}"
+        - Remaining Min: "{{ request.json.extension.remaining_minutes }}"
+     when: request.json.state == "COMPLETED"
+
+   - debug:
+       msg:
+        - State: "{{ request.json.state }}"
+        - Progress: "{{ request.json.progress }}"
+        - Error: "{{ request.json.error }}"
+     when: request.json.state == "FAILED"
+    

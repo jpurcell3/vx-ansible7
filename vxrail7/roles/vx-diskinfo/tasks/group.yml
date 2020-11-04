@@ -1,0 +1,20 @@
+---
+# Use the VxRail API to get cluster status
+ - name: "Retrieve VxRail Cluster Health"
+   dellemc.vxrail.vx_diskinfo:
+     ip: "{{ item }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+     failed: "{{failed}}"
+   register: vx
+   loop: "{{ grp }}"
+     
+ - name: set facts
+   set_fact:
+       status:  "{{ status | default([]) + [{'Cluster': item.item, 'Disks': item.instance.disks }] }}"
+   loop: "{{ vx.results }}"
+   no_log: true
+
+ - debug:
+     var: status
+     

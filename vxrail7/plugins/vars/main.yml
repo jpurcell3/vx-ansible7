@@ -1,0 +1,24 @@
+---
+# vars file for health inquiry
+vxm: vxr9
+vcadmin: administrator@vsphere.local
+vcpasswd: VMw@re123!
+esxhost: mgt-esx06.lab4.local
+vxadmin: vxadmin
+vxpasswd: VMw@re123!
+esx_mgt: 172.17.0.16
+esx_vsan: 172.17.1.16
+esx_vmotion: 172.17.2.16
+bundle: VXRAIL_COMPOSITE-4.7.510.zip
+vc_root_password:
+  - 'VMw@re123!'
+root_passwd: VMw@re123!
+psc_root_password:
+  - 'VMw@re123!'
+vcsa_user: root
+vcsa_passwd: VMw@re123!
+vxrail_hosts: 
+  - vxr6
+  - vxr7
+  - vxr8
+  - vxr9

@@ -1,0 +1,9 @@
+---
+- hosts: "{{vxm}}"
+#{% for host in groups['app_servers'] %}
+#   # something that applies to all app servers.
+#{% endfor %}
+  collections:
+  - dellemc.vxrail
+  roles: 
+    - vx-ssh

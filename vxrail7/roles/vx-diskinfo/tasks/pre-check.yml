@@ -1,0 +1,21 @@
+---
+# Use the VxRail API to get cluster status
+# -  name: confirm cluster status
+#    dellemc.vxrail.vx_health:
+#     ip: "{{vxm}}"
+#     vcadmin: "{{vcadmin}}"
+#     vcpasswd: "{{vcpasswd}}"
+#    register: health
+
+ -  name: Get disk list
+    dellemc.vxrail.vx_diskinfo:
+     ip: "{{vxm}}"
+     vcadmin: "{{vcadmin}}"
+     vcpasswd: "{{vcpasswd}}"
+     failed: "{{failed}}"
+    register: vx_facts
+#    when: health.ansible_facts.state ==  'Healthy'
+
+ - name: "Display Disk Information"
+   debug:
+     msg: "{{ health.ansible_facts }}"

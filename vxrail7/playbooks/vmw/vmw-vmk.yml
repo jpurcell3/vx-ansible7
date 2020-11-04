@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  collections:
+  - vmware
+  tasks:
+  - name: Maint Mode test
+    vmware_vmkernel_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      esxi_hostname: "{{ esx_mgt }}"
+      validate_certs: false
+    delegate_to: localhost
+
