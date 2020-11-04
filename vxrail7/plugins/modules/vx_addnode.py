@@ -160,7 +160,6 @@ class vxrail():
                 LOGGER.info(result)
         return compatible_nodes
 
-
     def get_nodes(self):
         ''' Return a list of available nodes '''
         try:
@@ -190,17 +189,19 @@ class vxrail():
 
     def create_validation_json(self, nodes, uplinks):
         ''' validate list of nodes as expansion candidates '''
-        expansion_json = {}
-        expansion_json['hosts'] = []
-        expansion_json['hosts'].append(self._create_one_host_section(nodes))
+        validate_json = {}
+        validate_json['hosts'] = []
+        validate_json['hosts'].append(self._create_one_host_section(nodes))
+        network_section = {}
+        network_section['vds'] = self._create_network_section(nodes, uplinks)
+
         vcenter_section = {}
         vcenter_section['username'] = module.params.get('vcadmin')
         vcenter_section['password'] = module.params.get('vxpasswd')
-        expansion_json['vcenter'] = vcenter_section
-        network_section = {}
-        network_section['vds'] = self._create_network_section(nodes, uplinks)
-        expansion_json['network'] = network_section
-        return expansion_json
+        validate_json['network'] = network_section
+        validate_json['vcenter'] = vcenter_section
+
+        return validate_json
 
     def create_expansion_json(self, nodes):
         ''' configure json object from user inputs '''
