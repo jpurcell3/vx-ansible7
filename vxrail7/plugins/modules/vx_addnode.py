@@ -193,7 +193,9 @@ class vxrail():
         validate_json['hosts'] = []
         validate_json['hosts'].append(self._create_one_host_section(nodes))
         network_section = {}
-        network_section['vds'] = self._create_network_section(nodes, uplinks)
+        vds = {}
+        vds = self._create_network_section(nodes, uplinks)
+        network_section['vds'] = vds
 
         vcenter_section = {}
         vcenter_section['username'] = module.params.get('vcadmin')
@@ -241,14 +243,16 @@ class vxrail():
         serial_numbers = []
 #        uplinks = module.params.get('uplinks')
 
-        for i in nodes:
-            serial_numbers.append(i)
+#        for i in range(len(nodes)):
+#            serial_numbers.append(nodes[i])
+        sn = {}
+        sn['host_serial_numbers'] = nodes
 
 #        for n in range(len(nics)):
 #            uplinks[n].name = nics[n].name
 #            uplinks[n].physical_nic = nics[n].pnic
 
-        nic_mappings.append(serial_numbers)
+        nic_mappings.append(sn)
         nic_mappings.append(uplinks)
 
         return nic_mappings
@@ -427,7 +431,7 @@ def main():
 #        LOGGER.info("expansion_validation: Sleeping 60 seconds before checking for status...")
 #        time.sleep(60)
 #    if validation_status == 'COMPLETED':
-        expansion_json = vxrail().create_expansion_json(node)
+    expansion_json = vxrail().create_expansion_json(node)
 #        task_id = vxrail().start_expansion(expansion_json)
 #        LOGGER.info('expansion_validation: vxrail task_ID: %s.', task_id)
 #        while expansion_status not in ('COMPLETED', 'FAILED'):
