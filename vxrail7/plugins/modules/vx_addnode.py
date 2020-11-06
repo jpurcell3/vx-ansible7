@@ -4,7 +4,6 @@
 
 import time
 import json
-import ipaddress
 import logging
 import requests
 import chardet
@@ -74,7 +73,7 @@ class ExpansionUrls():
     validate_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
     expansion_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
     validate_start_url_tpl = 'https://{}/rest/vxm/private/cluster/expansion/validate'
-    expansion_start_url_tpl = 'https://{}/rest/vxm/private/cluster/add-host'
+    start_expansion_url_tpl = 'https://{}/rest/vxm/private/cluster/add-host'
 
     def __init__(self, vxm_ip):
         '''init method'''
@@ -92,9 +91,9 @@ class ExpansionUrls():
         '''Maps to VxRail API: validation task progress'''
         return ExpansionUrls.validate_progress_url_tpl.format(self.vxm_ip, job_id)
 
-    def get_url_expansion_start(self):
+    def post_expansion_url(self):
         '''Map to VxRail Node Expansion api'''
-        return ExpansionUrls.expansion_start_url_tpl.format(self.vxm_ip)
+        return ExpansionUrls.start_expansion_url_tpl.format(self.vxm_ip)
 
     def get_url_expansion_progress(self, task_id):
         '''Map to VxRail Node Expansion api'''
@@ -114,6 +113,7 @@ class vxrail():
     def __init__(self):
         self.vxm_ip = module.params.get('ip')
         self.esxip = module.params.get('mgt_ip')
+        self.mgtgw = module.params.get('mgt_gw')
         self.vmotion_ip = module.params.get('vmotion_ip')
         self.vsanip = module.params.get('vsan_ip')
         self.timeout = module.params.get('timeout')
@@ -162,6 +162,7 @@ class vxrail():
 
     def get_nodes(self):
         ''' Return a list of available nodes '''
+        response = {}
         try:
             response = requests.get(url=self.expansion_urls.get_url_available_hosts(),
                                     verify=False,
@@ -171,7 +172,7 @@ class vxrail():
             LOGGER.error(http_err)
             LOGGER.error('Cannot connect to VxRail Manager %s.', self.vxm_ip)
 
-        if response.content:
+        if response:
             data = byte_to_json(response.content)
             LOGGER.info(data)
             if not data:
@@ -185,6 +186,7 @@ class vxrail():
                 LOGGER.info("completed compatibility validation...")
                 LOGGER.info(nodes)
                 return nodes
+        else:
             return "No compatable hosts"
 
     def create_validation_json(self, nodes, uplinks):
@@ -193,9 +195,9 @@ class vxrail():
         validate_json['hosts'] = []
         validate_json['hosts'].append(self._create_one_host_section(nodes))
         network_section = {}
-        vds = {}
-        vds = self._create_network_section(nodes, uplinks)
-        network_section['vds'] = vds
+        nic_mapping = []
+        nic_mapping = self._create_network_section(nodes, uplinks)
+        network_section['vds'] = {'nic_mappings': nic_mapping}
 
         vcenter_section = {}
         vcenter_section['username'] = module.params.get('vcadmin')
@@ -205,21 +207,24 @@ class vxrail():
 
         return validate_json
 
-    def create_expansion_json(self, nodes):
+    def create_expansion_json(self, nodes, uplinks):
         ''' configure json object from user inputs '''
-        all_expansion_json = []
-        vcenter_section = {}
-        vcenter_section['username'] = module.params.get('vcadmin')
-        vcenter_section['password'] = module.params.get('vcpasswd')
         expansion_json = {}
-        expansion_json['host'] = self._create_one_host_section(nodes)
-        expansion_json['vcenter'] = vcenter_section
-        expansion_json['maintenance_mode'] = False
-        all_expansion_json.append(expansion_json)
-        return all_expansion_json
+        network_dict = {}
+        nic_mapping = []
+        vcenter_dict = {}
+
+        expansion_json['host'] = self._create_expansion_host(nodes)
+        nic_mapping = self._create_network_section(nodes, uplinks)
+        network_dict['vds'] = {'nic_mappings': nic_mapping}
+        vcenter_dict['username'] = module.params.get('vcadmin')
+        vcenter_dict['password'] = module.params.get('vxpasswd')
+
+        expansion_json['network'] = network_dict
+        expansion_json['vcenter'] = vcenter_dict
+        return expansion_json
 
     def _create_one_host_section(self, snid):
-        hosts = []
         host = {}
         host['sn'] = snid
         host['hostname'] = module.params.get('esxhost')
@@ -228,7 +233,7 @@ class vxrail():
         host['management_account']['password'] = module.params.get('vxpasswd')
         host['root_password'] = module.params.get('root_passwd')
         host['networks'] = {}
-        host['networks']['management'] = {"ip" : module.params.get('mgt_ip'), "netmask" : "255.255.255.0", "gateway" : "172.17.0.1"}
+        host['networks']['management'] = {"ip" : module.params.get('mgt_ip'), "netmask" : "255.255.255.0", "gateway" : self.mgtgw}
         host['networks']['vsan'] = {"ip" : module.params.get('vsan_ip'), "netmask" : "255.255.255.0"}
         host['networks']['vmotion'] = {"ip" : module.params.get('vmotion_ip'), "netmask" : "255.255.255.0"}
         host['networks']['witness'] = {"ip" : module.params.get('witness_ip'), "netmask" : "255.255.255.0"}
@@ -237,55 +242,76 @@ class vxrail():
 
         return host
 
+    def _create_expansion_host(self, snid):
+        host = {}
+        host['sn'] = snid
+        host['hostname'] = module.params.get('esxhost')
+        host['management_account'] = {}
+        host['management_account']['username'] = module.params.get('vxadmin')
+        host['management_account']['password'] = module.params.get('vxpasswd')
+        host['root_password'] = module.params.get('root_passwd')
+        host["is_maintenance_mode"] = False
+        host['networks'] = {}
+        host['networks']['management'] = {"ip" : module.params.get('mgt_ip'), "netmask" : "255.255.255.0", "gateway" : "172.17.0.1"}
+        host['networks']['vsan'] = {"ip": module.params.get('vsan_ip'), "netmask": "255.255.255.0"}
+        host['networks']['vmotion'] = {"ip" : module.params.get('vmotion_ip'), "netmask" : "255.255.255.0"}
+        host['networks']['witness'] = {"ip" : module.params.get('witness_ip'), "netmask" : "255.255.255.0"}
+        host['geo_location'] = {}
+#        host['geo_location'] = {"rack_name" : module.params.get('rack_name'), "order_number" : module.params.get('rack_number')}
+        host['geo_location'] = {"rack_name" : "r1", "order_number" : "1"}
+
+        return host
 
     def _create_network_section(self, nodes, uplinks):
         nic_mappings = []
-        serial_numbers = []
-#        uplinks = module.params.get('uplinks')
-
-#        for i in range(len(nodes)):
-#            serial_numbers.append(nodes[i])
-        sn = {}
-        sn['host_serial_numbers'] = nodes
-
-#        for n in range(len(nics)):
-#            uplinks[n].name = nics[n].name
-#            uplinks[n].physical_nic = nics[n].pnic
-
-        nic_mappings.append(sn)
-        nic_mappings.append(uplinks)
-
+        nodelist = []
+        host_dict = {}
+        if isinstance(nodes, list):
+            for i in range(len(nodes)):
+                nodelist.append(nodes[i])
+        else:
+            nodelist = [nodes]
+        host_dict['host_serial_numbers'] = nodelist
+        host_dict['uplinks'] = uplinks
+        nic_mappings.append(host_dict)
         return nic_mappings
 
 
     def start_expansion(self, expansion_json):
         ''' orchestrate the expansion task '''
         request_id_pool = []
-        for json in expansion_json:
-            request_id = self.start_one_host_expansion(json)
+        if expansion_json:
+            request_id = self.start_one_host_expansion(expansion_json)
             request_id_pool.append(request_id)
         return request_id
 
 
-    def start_one_host_expansion(self, expansion_json):
+    def start_one_host_expansion(self, exp_json):
         ''' initiate cluster expansion '''
+        request_id = ''
         LOGGER.info("Starting One Host expansion...")
-        processed_data = []
+        addnode_url = self.expansion_urls.post_expansion_url()
         headers = {'Content-type': 'application/json'}
         try:
-            response = requests.post(url=self.expansion_urls.get_url_expansion_start(),
+            response = requests.post(url=addnode_url,
                                      verify=False,
                                      auth=self.auth,
                                      headers=headers,
-                                     data=json.dumps(expansion_json)
+                                     data=(exp_json)
                                      )
-        except Exception as http_err:
-            LOGGER.error(http_err)
-            LOGGER.error('%s Cannot connect to VxRail Manager %s .', response.url, self.vxm_ip)
+            response.raise_for_status()
+            LOGGER.info(response.status_code)
+            LOGGER.info(response.content)
+        except requests.exceptions.HTTPError as err:
+            LOGGER.error('HTTP Request error: %s', err)
+            module.fail_json(msg="Resonse error from url %s within %s seconds (timeout)" % (addnode_url, self.timeout))
 
-        if response.content:
-            data = byte_to_json(response.content)
-            return data['request_id']
+#        if response.status_code == '202':
+        data = byte_to_json(response.content)
+        LOGGER.info('Data %s', data)
+        request_id = data['request_id']
+#        if request_id:
+        return request_id
 
     def start_validation(self, exp_json):
         ''' validate the pre-check '''
@@ -319,6 +345,7 @@ class vxrail():
     def get_validation_status(self, job_id):
         ''' get task status '''
         response_json = []
+        validation_status = 'unsucessful'
         session = requests.Session()
         try:
             response = session.get(url=self.expansion_urls.get_url_validation_progress(job_id),
@@ -370,7 +397,7 @@ class vxrail():
         if expansion_status == 'COMPLETED':
             LOGGER.info("The Cluster expansion has completed")
         elif expansion_status == 'FAILED':
-            LOGGER.info('Expansion Task %s has failed.', job_id)
+            LOGGER.info('Expansion Task %s has failed.', task_id)
             LOGGER.info(response_json['extension']['thoroughValidationFieldErrors'])
             LOGGER.info(response_json['extension']['normalValidationFieldErrors'])
         else:
@@ -392,8 +419,10 @@ def main():
                            vxadmin=dict(required=True),
                            vxpasswd=dict(required=True, no_log=True),
                            mgt_ip=dict(required=True),
+                           mgt_gw=dict(required=True),
                            vsan_ip=dict(required=True),
                            vmotion_ip=dict(required=True),
+                           witness_ip=dict(required=True),
                            root_passwd=dict(required=True, no_log=True),
                            timeout=dict(type='int', default=10),
                            ),
@@ -406,13 +435,13 @@ def main():
         link['name'] = "uplink" + str(i+1)
         link['physical_nic'] = "vmnic" + str(i)
         uplinks.append(link)
-  
+
     validation_status = 0
     node_list = []
     expansion_status = 0
     node_list = vxrail().get_nodes()
-    if node_list == 'error':
-        module.fail_json(msg="Module failed to connect to VxRail Manager")
+    if (not node_list) or (node_list == 'error'):
+        module.fail_json(msg="Module failed to get a connect to VxRail Manager")
     LOGGER.info('VxRail Node inventory completed.')
     LOGGER.info('The following nodes are available for cluster expansion -->: %s.', node_list)
     if node_list in ('No available hosts', 'No compatable hosts'):
@@ -424,23 +453,25 @@ def main():
         exp_json = vxrail().create_validation_json(node, uplinks)
         LOGGER.info('node_check: %s.', exp_json)
         jobid = vxrail().start_validation(exp_json)
-#        LOGGER.info('node_check: VxRail task id: %s.', jobid)
+        LOGGER.info('node_check: VxRail task id: %s.', jobid)
     LOGGER.info('Checking to see if we have what we need for the deployment...')
-#    while validation_status not in ('COMPLETED', 'FAILED'):
-#        validation_status = vxrail().get_validation_status(jobid)
-#        LOGGER.info("expansion_validation: Sleeping 60 seconds before checking for status...")
-#        time.sleep(60)
-#    if validation_status == 'COMPLETED':
-    expansion_json = vxrail().create_expansion_json(node)
-#        task_id = vxrail().start_expansion(expansion_json)
-#        LOGGER.info('expansion_validation: vxrail task_ID: %s.', task_id)
-#        while expansion_status not in ('COMPLETED', 'FAILED'):
-#            LOGGER.info("node_expansion: sleeping 60 seconds...")
-#            time.sleep(60)
-#            expansion_status = vxrail().track_expansion_status(task_id)
-#            LOGGER.info('node_expansion: track_expansion status: %s', expansion_status)
-#    else:
-#        expansion_status = validation_status
+    while validation_status not in ('COMPLETED', 'FAILED'):
+        validation_status = vxrail().get_validation_status(jobid)
+        LOGGER.info("validation: Sleeping 60 seconds before checking for status...")
+        time.sleep(60)
+    if validation_status == 'COMPLETED':
+        expansion_json = vxrail().create_expansion_json(node, uplinks)
+        cluster_json = json.dumps(expansion_json)
+        LOGGER.info(cluster_json)
+        task_id = vxrail().start_expansion(cluster_json)
+        LOGGER.info('Cluster_expansion: vxrail task_ID: %s.', task_id)
+        while expansion_status not in ('COMPLETED', 'FAILED'):
+            LOGGER.info("cluster_expansion: sleeping 60 seconds...")
+            time.sleep(60)
+            expansion_status = vxrail().track_expansion_status(task_id)
+            LOGGER.info('cluster_expansion: track_expansion status: %s', expansion_status)
+    else:
+        expansion_status = validation_status
 
     vx_facts = {'validation_status' : expansion_status}
     vx_facts_result = dict(changed=False, ansible_facts=vx_facts)

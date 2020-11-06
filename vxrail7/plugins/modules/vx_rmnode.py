@@ -333,6 +333,7 @@ def main():
             host_info = VxRail().get_host_info()
             time.sleep(5)
     if host_info[2] == 'off':
+        time.sleep(60)
         remove_id = VxRail().remove_vxhost(host_info[0], node_json)
         while status not in ('COMPLETED' or 'FAILED'):
             LOGGER.info('remove_node: %s', remove_id)
