@@ -9,6 +9,6 @@
     redfish_command:
       category: Systems
       command: PowerOn
-      baseuri: "{{ baseuri }}"
+      baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"

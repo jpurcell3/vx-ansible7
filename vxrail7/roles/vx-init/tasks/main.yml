@@ -1,10 +1,10 @@
 ---
 # Initiate VxRail Cluster Deployment via the VxRail Manager API
  - name: Initialize VxRail Cluster
-   vx-init:
-     ip: "{{vxm}}"
-     cfg: "{{config}}"
+   dellemc.vxrail.vx_init:
+     ip: "{{ vxm }}"
+     cfg: "{{ config }}"
    register: cluster
 
  - debug:
-     msg: "{{cluster}}"
+     msg: "{{ cluster }}"

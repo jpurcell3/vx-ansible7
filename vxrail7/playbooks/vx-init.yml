@@ -1,7 +1,7 @@
 ---
-- name: Get Node Firmware
+- name: Perform a VxRail First Run Deployment
   hosts: localhost
   collections:
   - dellemc.vxrail
   roles:
-  - vx-addnode
+  - vx-init

@@ -9,6 +9,6 @@
     redfish_command:
       category: Systems
       command: PowerGracefulShutdown
-      baseuri: "{{ baseuri }}"
+      baseuri: "{{ ip }}"
       username: "{{ username }}"
       password: "{{ password }}"
