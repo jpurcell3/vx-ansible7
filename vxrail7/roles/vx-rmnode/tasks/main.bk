@@ -1,0 +1,13 @@
+---
+ -  name: Remove node {{ host }}
+    dellemc.vxrail.vx_rmnode:
+      ip: "{{ vxm }}"
+      vcadmin: "{{ vcadmin }}"
+      vcpasswd: "{{ vcpasswd }}"
+      esxhost: "{{ host }}"
+      root: "{{ root }}"
+      rootpasswd: "{{ rootpasswd }}"
+    register: output
+
+ - debug:
+     msg: "{{ output }}"

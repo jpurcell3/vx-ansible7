@@ -297,8 +297,6 @@ class vxrail():
                                      data=(hexp_json)
                                      )
             response.raise_for_status()
-            LOGGER.info(response.status_code)
-            LOGGER.info(response.content)
         except requests.exceptions.HTTPError as err:
             LOGGER.error('HTTP Request error: %s', err)
             module.fail_json(msg="Resonse error from url %s within %s seconds (timeout)" % (addnode_url, self.timeout))

@@ -84,6 +84,7 @@ class VxRail():
                                     verify=False,
                                     )
             response.raise_for_status()
+
         except HTTPError as http_err:
             LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
             return 'error'
@@ -116,7 +117,7 @@ def main():
     LOGGER.info(result)
 
     if result == 'error':
-        module.fail_json(msg="VxRail Manager is unreachable")
+        module.fail_json(msg="VxRail Manager returned an error. It is either unreachable or it has already been deployed")
 
 
     vx_facts_result = dict(changed=False, ansible_facts=result)

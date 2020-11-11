@@ -1,17 +1,5 @@
 #!/usr/bin/python3
 ''' VxRail Remove Node Module '''
-
-import time
-import json
-import logging
-import requests
-import chardet
-import urllib3
-from requests.exceptions import HTTPError
-from ansible.module_utils.basic import AnsibleModule
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-
 # Copyright: (c) 2020, Jeff Purcell Jones <jeff.purcell@dell.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -86,6 +74,16 @@ EXAMPLES = """
 RETURN = """
 """
 
+import time
+import json
+import logging
+import requests
+import chardet
+import urllib3
+from requests.exceptions import HTTPError
+from ansible.module_utils.basic import AnsibleModule
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 class CustomLogFormatter(logging.Formatter):
     ''' Logging method for capturing module output '''
     info_fmt = "%(asctime)s [%(levelname)s]\t%(message)s"
@@ -97,12 +95,10 @@ class CustomLogFormatter(logging.Formatter):
     def format(self, record):
         if record.levelno == logging.INFO:
             self._fmt = CustomLogFormatter.info_fmt
-            # python 3 compatibility
             if hasattr(self, '_style'):
                 self._style._fmt = CustomLogFormatter.info_fmt
         else:
             self._fmt = CustomLogFormatter.debug_fmt
-            # python 3 compatibility
             if hasattr(self, '_style'):
                 self._style._fmt = CustomLogFormatter.debug_fmt
         result = logging.Formatter.format(self, record)
@@ -124,12 +120,6 @@ logging.getLogger('urllib3').setLevel(logging.WARNING)
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
 
-# console ouput
-CONSOLE = logging.StreamHandler()
-CONSOLE.setLevel(logging.INFO)
-CONSOLE.setFormatter(LOG_FORMAT)
-LOGGER.addHandler(CONSOLE)
-
 # file output
 FILEHANDLER = logging.FileHandler(LOG_FILE_NAME)
 FILEHANDLER.setLevel(logging.DEBUG)
@@ -139,7 +129,9 @@ LOGGER.addHandler(FILEHANDLER)
 
 class ExpansionUrls():
     ''' URL class to expose VxRail APIs as class methods '''
+    vx_health_tpl = 'https://{}/rest/vxm/v1/cluster'
     cluster_hosts_url_tpl = 'https://{}/rest/vxm/v1/system/cluster-hosts'
+    shutdown_host_url_tpl = 'https://{}/rest/vxm/v1/hosts/{}/shutdown'
     remove_host_url_tpl = 'https://{}/rest/vxm/v1/cluster/remove-host'
     job_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
 
@@ -153,6 +145,11 @@ class ExpansionUrls():
     def get_url_shutdown_host(self, host_sn):
         ''' shutdown api '''
         return ExpansionUrls.shutdown_host_url_tpl.format(self.vxm_ip, host_sn)
+
+    def vx_precheck(self):
+        '''Map to VxRail node pre-check api'''
+        return ExpansionUrls.vx_health_tpl.format(self.vxm_ip)
+
 
     def get_url_remove_host(self, host_sn):
         ''' removal api '''
@@ -175,10 +172,33 @@ class VxRail():
         self.vcsa_passwd = module.params.get('rootpasswd')
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
+    def precheck(self):
+        ''' check for candidate nodes '''
+        LOGGER.info("Performing pre-check of environment...")
+        vx = {}
+        try:
+            response = requests.get(url=self.expansion_urls.vx_precheck(),
+                                    verify=False,
+                                    auth=self.auth,
+                                    )
+            response.raise_for_status()
+        except HTTPError as http_err:
+            LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
+            return 'error'
+        except Exception as api_exception:
+            LOGGER.error(' %s Cannot connect to VxRail Manager %s', api_exception, self.vxm_ip)
+            return 'error'
+
+        if response.status_code == 200:
+            data = byte_to_json(response.content)
+            vx['state'] = data['health']
+        LOGGER.info("Current vCenter Settings")
+        LOGGER.info('   VxRail Health: %s', vx['state'])
+        return vx
+
     def get_host_info(self):
         ''' get host list '''
-        obj = {}
-        response = ''
+        host_data = []
         host_url = self.expansion_urls.get_url_hosts()
         try:
             response = requests.get(url=host_url,
@@ -186,14 +206,12 @@ class VxRail():
                                     auth=self.auth,
                                     timeout=self.timeout)
             response.raise_for_status()
-            LOGGER.info(response.status_code)
-#            LOGGER.info(response.content)
         except requests.exceptions.HTTPError as err:
-            LOGGER.error('Get Host Method error %s:', err)
-            module.fail_json(msg="Resonse error from url %s)" % (host_url))
+            LOGGER.error('Get Host Method error: %s', err)
+            module.fail_json(msg="Resonse error from: %s" % (host_url))
         data = byte_to_json(response.content)
         nodes = len(data)
-        LOGGER.info(data)
+#        LOGGER.info(data)
         LOGGER.info('Cluster size: %d', nodes)
 
         if not nodes:
@@ -202,83 +220,103 @@ class VxRail():
             return "The cluster is at the minumum node count. Node cannot be removed!"
         for item in data:
             if (item.get('host_name')) == self.hostname:
-                obj['sn'] = item.get('serial_number')
-                obj['op_state'] = item.get('operational_status')
-                obj['pstate'] = item.get('power_status')
-        return obj
+                host_sn = item.get('serial_number')
+                op_status = item.get('operational_status')
+                power = item.get('power_status')
+                host_data = [host_sn, op_status, power]
+        return host_data
 
-    def create_node_json(self, host_sn):
+
+    def rmnode_json(self, host_sn):
         ''' create node removal payload '''
         node_json = {}
         node_json['serial_number'] = host_sn
-        vc_admin_dict = {}
-        vc_admin_dict['username'] = self.user
-        vc_admin_dict['password'] = self.password
-        vcsa_root_dict = {}
-        vcsa_root_dict['username'] = self.vcsa_user
-        vcsa_root_dict['password'] = self.vcsa_passwd
-        node_json['vc_admin_user'] = vc_admin_dict
-        node_json['vcsa_root_user'] = vcsa_root_dict
+        node_json['vc_admin_user'] = {'username': self.user, 'password': self.password}
+        node_json['vcsa_root_user'] = {'username': self.vcsa_user, 'password': self.vcsa_passwd}
+        dump = json.dumps(node_json)
+        LOGGER.info(dump)
         return node_json
 
-    def set_esxhost_mm(self, host_sn, node_json):
+    def shutdown_esx_host(self, host_sn, node_json):
         ''' shutdown node '''
-        data = json.dumps(node_json)
         shutdown_url = self.expansion_urls.get_url_shutdown_host(host_sn)
-        response_body = requests.post(
-                        url=shutdown_url,
-                        verify=False,
-                        auth=self.auth,
-                        data=data)
+        response_body = requests.post(url=shutdown_url,
+                                      verify=False,
+                                      auth=self.auth,
+                                      data=json.dumps(node_json),
+                                      )
         response_json = byte_to_json(response_body.content)
         return response_json
 
     def remove_vxhost(self, host_sn, node_json):
         ''' remove node '''
-        json_data = json.dumps(node_json)
         remove_url = self.expansion_urls.get_url_remove_host(host_sn)
         response_body = requests.post(
                         url=remove_url,
                         verify=False,
                         auth=self.auth,
-                        data=json_data)
+                        data=json.dumps(node_json),
+                        )
         response_json = byte_to_json(response_body.content)
         request_id = response_json['request_id']
+        LOGGER.info('Remove host task id %s', request_id)
         return request_id
+
+    def track_shutdown_progress(self, job_id):
+        ''' track progress of node shutdown '''
+        sleep_time = 30
+        progress_url = self.expansion_urls.get_url_job_progress(job_id)
+        while 1:
+            time.sleep(sleep_time)
+            response = requests.get(url=progress_url,
+                                    verify=False,
+                                    auth=self.auth,
+                                    )
+            if response:
+                response_json = byte_to_json(response.content)
+                shutdown_status = response_json["state"]
+                LOGGER.info('Shutdown Status %s', shutdown_status)
+            if shutdown_status == 'COMPLETED':
+                LOGGER.info("Node Shutdown completed")
+                shutdown_status = "Completed"
+                break
+            if shutdown_status == 'FAILED':
+                LOGGER.info('Node Shutdown Task %s has failed.', job_id)
+                LOGGER.info(response_json['extension']['normalValidationFieldErrors'])
+                shutdown_status = "Failed"
+                break
+            else:
+                LOGGER.info('Shutdown Task is running...')
+                LOGGER.info("Sleeping 5 seconds...")
+                time.sleep(5)
+        return shutdown_status
 
     def track_remove_progress(self, job_id):
         ''' track vxrail removal task '''
         progress_url = self.expansion_urls.get_url_job_progress(job_id)
-        remove_status = ''
         session = requests.Session()
-        while remove_status not in ("COMPLETED", "FAILED"):
-            try:
-                response = session.get(url=progress_url,
-                                       verify=False,
-                                       auth=self.auth)
-                response.raise_for_status()
-            except HTTPError as http_err:
-                LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
-                return 'error'
-
-            if response.status_code == 200:
-                response_json = byte_to_json(response.content)
-                remove_status = response_json["state"]
-                LOGGER.info('Removal status: %s', remove_status)
-                if remove_status == 'COMPLETED':
-                    LOGGER.info("Node has been succesully removed")
-                if remove_status == 'FAILED':
-                    LOGGER.info('Node removal task %s has failed.', job_id)
-                    for i in range(len(response_json['extension'])):
-                        if response_json['extension'][i]['status'] == 'false':
-                            LOGGER.info(response_json['extension'][i]['name'])
-                            LOGGER.info(response_json['extension'][i]['message'])
-                    module.fail_json(msg="Node Removal Task has failed")
-                if remove_status == 'IN_PROGRESS':
-                    LOGGER.info(remove_status)
-                    LOGGER.info('Node Removal in progress: Sleeping 60 seconds...')
-                    time.sleep(60)
-        return remove_status
+        response = session.get(
+            url=progress_url,
+            verify=False,
+            auth=self.auth
+                )
+        if response:
+            response_json = byte_to_json(response.content)
+            removal_status = response_json["state"]
+            LOGGER.info('Removal status: %s', removal_status)
+            if removal_status == 'COMPLETED':
+                LOGGER.info("Node has been succesully removed")
+            elif removal_status == 'FAILED':
+                LOGGER.info('Node removal task %s has failed.', job_id)
+                for i in range(len(response_json['extension'])):
+                    if response_json['extension'][i]['status'] == 'false':
+                        LOGGER.info(response_json['extension'][i]['name'])
+                        LOGGER.info(response_json['extension'][i]['message'])
+            else:
+                LOGGER.info(removal_status)
+                LOGGER.info('Node Removal in progress: Sleeping 5 seconds...')
+                time.sleep(5)
+        return removal_status
 
 def main():
     ''' start here '''
@@ -298,25 +336,41 @@ def main():
     )
 
     status = 'Node Not Removed'
-    node_json = {}
-    host = VxRail().get_host_info()
-    LOGGER.info('Host info details: %s.', host)
-    if not host['sn']:
-        module.fail_json(msg="VxRail Host not Found!")
-    if isinstance(host, str):
-        status = host
-    else:
-        node_json = VxRail().create_node_json(host['sn'])
-#        if host['pstate'] in ('on', 'maintenance'):
-        if host['pstate'] == 'maintenance':
-            remove_id = VxRail().remove_vxhost(host['sn'], node_json)
-            while status not in ('COMPLETED' or 'FAILED'):
-                LOGGER.info('remove_node: %s', remove_id)
-                status = VxRail().track_remove_progress(remove_id)
-                LOGGER.info(status)
-                time.sleep(30)
+    health = VxRail().precheck()
+    LOGGER.info(health)
+    if health['state'] != "Healthy":
+        vx_facts = {'msg' : "VxRail Cluster is not in 'Healthy' State. Please correct and retry"}
+        vx_facts_result = dict(changed=False, ansible_facts=vx_facts)
+        module.exit_json(**vx_facts_result)
 
-    vx_facts = {'task_status': status}
+    host_info = VxRail().get_host_info()
+    LOGGER.info('Host info details: %s.', host_info)
+    if len(host_info) == 0:
+        module.fail_json(msg="VxRail Host not Found!")
+    if isinstance(host_info, str):
+        status = host_info
+    else:
+        node_json = VxRail().rmnode_json(host_info[0])
+        LOGGER.info('Node JSON %s', node_json)
+        LOGGER.info(host_info[2])
+        if host_info[2] == 'on' or host_info[2] == 'maintenance':
+            shutdown_dict = VxRail().shutdown_esx_host(host_info[0], node_json)
+            shutdown_id = shutdown_dict.get('request_id')
+            shutdown_status = VxRail().track_shutdown_progress(shutdown_id)
+            LOGGER.info(shutdown_status)
+        while (host_info[2]) == 'on':
+            host_info = VxRail().get_host_info()
+            time.sleep(30)
+    if host_info[2] == 'off':
+        time.sleep(60)
+        remove_id = VxRail().remove_vxhost(host_info[0], node_json)
+        while status not in ('COMPLETED' or 'FAILED'):
+            LOGGER.info('remove_node: %s', remove_id)
+            status = VxRail().track_remove_progress(remove_id)
+            LOGGER.info(status)
+            time.sleep(30)
+
+    vx_facts = {'task_status' : status}
     vx_facts_result = dict(changed=True, ansible_facts=vx_facts)
     module.exit_json(**vx_facts_result)
 

@@ -75,8 +75,8 @@ EXAMPLES = """
       vcadmin: "{{ vcadmin }}"
       vcpasswd: "{{ vcpasswd }}"
       host: "{{ esxhost }}"
-      root: "{{ root }}"
-      rootpasswd: "{{ rootpasswd }}"
+      vcroot: "{{ vcroot }}"
+      vcrootpasswd: "{{ vcrootpasswd }}"
     register: output
 
  - debug:
@@ -140,6 +140,7 @@ LOGGER.addHandler(FILEHANDLER)
 class ExpansionUrls():
     ''' URL class to expose VxRail APIs as class methods '''
     cluster_hosts_url_tpl = 'https://{}/rest/vxm/v1/system/cluster-hosts'
+    shutdown_host_url_tpl = 'https://{}/rest/vxm/v1/hosts/{}/shutdown'
     remove_host_url_tpl = 'https://{}/rest/vxm/v1/cluster/remove-host'
     job_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
 
@@ -171,8 +172,8 @@ class VxRail():
         self.user = module.params.get('vcadmin')
         self.password = module.params.get('vcpasswd')
         self.auth = (self.user, self.password)
-        self.vcsa_user = module.params.get('root')
-        self.vcsa_passwd = module.params.get('rootpasswd')
+        self.vcsa_user = module.params.get('vcroot')
+        self.vcsa_passwd = module.params.get('vcrootpasswd')
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
     def get_host_info(self):
@@ -221,7 +222,7 @@ class VxRail():
         node_json['vcsa_root_user'] = vcsa_root_dict
         return node_json
 
-    def set_esxhost_mm(self, host_sn, node_json):
+    def shutdown_esx_host(self, host_sn, node_json):
         ''' shutdown node '''
         data = json.dumps(node_json)
         shutdown_url = self.expansion_urls.get_url_shutdown_host(host_sn)
@@ -245,6 +246,37 @@ class VxRail():
         response_json = byte_to_json(response_body.content)
         request_id = response_json['request_id']
         return request_id
+
+    def track_shutdown_progress(self, job_id):
+        ''' track progress of node shutdown '''
+        shutdown_status = ''
+        response_json = {}
+        progress_url = self.expansion_urls.get_url_job_progress(job_id)
+        while shutdown_status not in ("FAILED", "COMPLETED"):
+            LOGGER.info('Initial Shutdown Status %s', shutdown_status)
+            try:
+                response = requests.get(url=progress_url,
+                                        verify=False,
+                                        auth=self.auth)
+                response.raise_for_status()
+            except HTTPError as http_err:
+                LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
+                return 'error'
+
+            if response.status_code == 200:
+                response_json = byte_to_json(response.content)
+                shutdown_status = response_json["state"]
+                if shutdown_status == 'COMPLETED':
+                    LOGGER.info("Shutdown task has completed")
+                elif shutdown_status == 'FAILED':
+                    LOGGER.info('Node Shutdown Task %s has failed.', job_id)
+                    LOGGER.info(response_json['extension']['normalValidationFieldErrors'])
+                    module.fail_json(msg="Node shutdown has failed")
+                else:
+                    LOGGER.info('Shutdown Task is running...Sleeping 60 seconds...')
+                    time.sleep(60)
+
+        return shutdown_status
 
     def track_remove_progress(self, job_id):
         ''' track vxrail removal task '''
@@ -276,8 +308,7 @@ class VxRail():
                     module.fail_json(msg="Node Removal Task has failed")
                 if remove_status == 'IN_PROGRESS':
                     LOGGER.info(remove_status)
-                    LOGGER.info('Node Removal in progress: Sleeping 60 seconds...')
-                    time.sleep(60)
+                    LOGGER.info('Node Removal in progress: Sleeping 5 seconds...')
         return remove_status
 
 def main():
@@ -290,8 +321,8 @@ def main():
             vcpasswd=dict(required=True, no_log=True),
             ip=dict(required=True),
             esxhost=dict(required=True),
-            root=dict(required=True),
-            rootpasswd=dict(required=True, no_log=True),
+            vcroot=dict(required=True),
+            vcrootpasswd=dict(required=True, no_log=True),
             timeout=dict(type='int', default=10),
             ),
         supports_check_mode=True,
@@ -307,14 +338,28 @@ def main():
         status = host
     else:
         node_json = VxRail().create_node_json(host['sn'])
-#        if host['pstate'] in ('on', 'maintenance'):
-        if host['pstate'] == 'maintenance':
-            remove_id = VxRail().remove_vxhost(host['sn'], node_json)
-            while status not in ('COMPLETED' or 'FAILED'):
-                LOGGER.info('remove_node: %s', remove_id)
-                status = VxRail().track_remove_progress(remove_id)
-                LOGGER.info(status)
-                time.sleep(30)
+        LOGGER.info('System Status %s', host['pstate'])
+        LOGGER.info('System Status %s', host['op_state'])
+        if host['pstate'] in ('on', 'maintenance'):
+            shutdown_dict = VxRail().shutdown_esx_host(host['sn'], node_json)
+            shutdown_id = shutdown_dict.get('request_id')
+            LOGGER.info('Shutdown Task ID: %s', shutdown_id)
+            status = VxRail().track_shutdown_progress(shutdown_id)
+            LOGGER.info('Shutdown status: %s', status)
+
+    LOGGER.debug(host['pstate'])
+    while host['pstate'] in ('on', 'maintenance'):
+        host = VxRail().get_host_info()
+        LOGGER.info("Waiting 60 seconds for host to power down...")
+        time.sleep(60)
+
+    #    if host['pstate'] == 'off':
+    #        remove_id = VxRail().remove_vxhost(host['sn'], node_json)
+    #        while status not in ('COMPLETED' or 'FAILED'):
+    #            LOGGER.info('remove_node: %s', remove_id)
+    #            status = VxRail().track_remove_progress(remove_id)
+    #            LOGGER.info(status)
+    #            time.sleep(30)
 
     vx_facts = {'task_status': status}
     vx_facts_result = dict(changed=True, ansible_facts=vx_facts)

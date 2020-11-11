@@ -120,6 +120,7 @@ class ExpansionUrls():
     ''' Mapping class for VxRail APIs '''
     hosts_url_tpl = 'https://{}/rest/vxm/v1/hosts'
     node_url_tpl = 'https://{}/rest/vxm/v1/hosts/{}'
+    get_url_idrac_tpl = 'https://{}/rest/vxm/v1/hosts/{}/idrac/network'
 
     def __init__(self, vxm_ip):
         self.vxm_ip = vxm_ip
@@ -132,6 +133,10 @@ class ExpansionUrls():
         ''' VxRail get node details api '''
         return ExpansionUrls.node_url_tpl.format(self.vxm_ip, node_sn)
 
+    def get_idrac_ip(self, host_sn):
+        ''' shutdown api '''
+        return ExpansionUrls.get_url_idrac_tpl.format(self.vxm_ip, host_sn)
+
 
 class VxRail():
     ''' main module class for all methods '''
@@ -140,7 +145,9 @@ class VxRail():
         self.timeout = module.params.get('timeout')
         self.vcadmin = module.params.get('vcadmin')
         self.vcpasswd = module.params.get('vcpasswd')
+        self.auth = (self.vcadmin, self.vcpasswd)
         self.esx = module.params.get('host')
+        self.timeout = module.params.get('timeout')
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
     def get_host(self):
@@ -174,8 +181,7 @@ class VxRail():
                 list = []
                 host['Name'] = hostname
                 host['Id'] = item.get('id')
-                host['Health'] = item.get('health')
-                host['Operational_Status'] = item.get('operational_status')
+                host['idrac_ip'] = self.get_idrac_ip(host['Id'])
                 nic_list = (item.get('nics'))
                 for n in nic_list:
                     nic_dict['mac'] = n.get('mac')
@@ -186,7 +192,6 @@ class VxRail():
                 host['nics'] = list
                 LOGGER.info(host)
                 rpt.append(dict(host))
-                rpt.append(nic_dict)
         return rpt
 
 
@@ -217,8 +222,8 @@ class VxRail():
             hostname = item.get('hostname')
             host['Name'] = hostname
             host['Id'] = item.get('id')
-            host['Health'] = item.get('health')
             host['Operational_Status'] = item.get('operational_status')
+            host['idrac_ip'] = self.get_idrac_ip(host['Id'])
             nic_list = (item.get('nics'))
             for n in nic_list:
                 for key, value in n.items():
@@ -230,8 +235,25 @@ class VxRail():
                 host['nics'] = list
             LOGGER.info(host)
             rpt.append(dict(host))
-            rpt.append(nic_dict)
         return rpt
+
+
+    def get_idrac_ip(self, sn):
+        ''' get host list '''
+        api_url = self.expansion_urls.get_idrac_ip(sn)
+        try:
+            response = requests.get(url=api_url,
+                                    verify=False,
+                                    auth=self.auth,
+                                    timeout=self.timeout)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            LOGGER.error('Get Host Method error: %s', err)
+            module.fail_json(msg="No valid or no response from url %s within %s \
+                             seconds (timeout)" % (api_url, self.timeout))
+        data = byte_to_json(response.content)
+        idrac_ip = data['ip']['ip_address']
+        return idrac_ip
 
 
 def main():
