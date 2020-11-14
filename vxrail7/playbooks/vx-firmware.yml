@@ -1,6 +1,9 @@
 ---
 - name: Get Node Firmware
   hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+
   gather_facts: no
   vars:
     - isgroup: false

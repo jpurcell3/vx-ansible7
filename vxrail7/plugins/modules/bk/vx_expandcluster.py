@@ -68,12 +68,11 @@ LOGGER.addHandler(FILEHANDLER)
 class ExpansionUrls():
     ''' Class performs mapping of VxRail APIs and class methods called within the module '''
     available_hosts_url_tpl = 'https://{}/rest/vxm/v1/system/available-hosts'
-    precheck_url_tpd = 'https://{}/rest/vxm/private/cluster/expansion/precheck'
-    network_pool_url_tpl = 'https://{}/rest/vxm/v2/cluster/network/pools'
-    validate_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
     expansion_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
-    validate_start_url_tpl = 'https://{}/rest/vxm/private/cluster/expansion/validate'
+    precheck_url_tpd = 'https://{}/rest/vxm/private/cluster/expansion/precheck'
     start_expansion_url_tpl = 'https://{}/rest/vxm/private/cluster/add-host'
+    validate_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
+    validate_node_url_tpl = 'https://{}/rest/vxm/private/cluster/expansion/validate'
 
     def __init__(self, vxm_ip):
         '''init method'''
@@ -83,9 +82,9 @@ class ExpansionUrls():
         '''map to vxrail list available hosts api'''
         return ExpansionUrls.available_hosts_url_tpl.format(self.vxm_ip)
 
-    def get_url_validation_start(self):
+    def post_url_validate_node(self):
         '''map to vxrail validate compatable hosts API'''
-        return ExpansionUrls.validate_start_url_tpl.format(self.vxm_ip)
+        return ExpansionUrls.validate_node_url_tpl.format(self.vxm_ip)
 
     def get_url_validation_progress(self, job_id):
         '''Maps to VxRail API: validation task progress'''
@@ -99,10 +98,6 @@ class ExpansionUrls():
         '''Map to VxRail Node Expansion api'''
         return ExpansionUrls.expansion_progress_url_tpl.format(self.vxm_ip, task_id)
 
-    def get_url_network_pool(self):
-        '''Map to VxRail get network pools api'''
-        return ExpansionUrls.network_pool_url_tpl.format(self.vxm_ip)
-
     def get_url_precheck(self):
         '''Map to VxRail node pre-check api'''
         return ExpansionUrls.precheck_url_tpd.format(self.vxm_ip)
@@ -111,15 +106,16 @@ class ExpansionUrls():
 class vxrail():
     ''' Root Class for all mathods '''
     def __init__(self):
-        self.vxm_ip = module.params.get('ip')
         self.esxip = module.params.get('mgt_ip')
         self.mgtgw = module.params.get('mgt_gw')
-        self.vmotion_ip = module.params.get('vmotion_ip')
-        self.vsanip = module.params.get('vsan_ip')
-        self.timeout = module.params.get('timeout')
         self.vcadmin = module.params.get('vcadmin')
         self.vcpasswd = module.params.get('vcpasswd')
         self.auth = (self.vcadmin, self.vcpasswd)
+        self.vxm_ip = module.params.get('ip')
+        self.vmotionip = module.params.get('vmotion_ip')
+        self.vsanip = module.params.get('vsan_ip')
+        self.witness = module.params.get('witness_ip')
+        self.timeout = module.params.get('timeout')
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
 
@@ -192,8 +188,8 @@ class vxrail():
     def create_validation_json(self, nodes, uplinks):
         ''' validate list of nodes as expansion candidates '''
         validate_json = {}
-        validate_json['host'] = []
-        validate_json['host'].append(self._create_one_host_section(nodes))
+        validate_json['hosts'] = []
+        validate_json['hosts'].append(self._create_one_host_section(nodes))
         network_section = {}
         nic_mapping = []
         nic_mapping = self._create_network_section(nodes, uplinks)
@@ -211,8 +207,9 @@ class vxrail():
         ''' configure json object from user inputs '''
         expansion_json = {}
         network_dict = {}
-        nic_mapping = []
         vcenter_dict = {}
+
+        nic_mapping = []
 
         expansion_json['host'] = self._create_expansion_host(nodes)
         nic_mapping = self._create_network_section(nodes, uplinks)
@@ -233,10 +230,10 @@ class vxrail():
         host['management_account']['password'] = module.params.get('vxpasswd')
         host['root_password'] = module.params.get('root_passwd')
         host['networks'] = {}
-        host['networks']['management'] = {"ip" : module.params.get('mgt_ip'), "netmask" : "255.255.255.0", "gateway" : self.mgtgw}
-        host['networks']['vsan'] = {"ip" : module.params.get('vsan_ip'), "netmask" : "255.255.255.0"}
-        host['networks']['vmotion'] = {"ip" : module.params.get('vmotion_ip'), "netmask" : "255.255.255.0"}
-        host['networks']['witness'] = {"ip" : module.params.get('witness_ip'), "netmask" : "255.255.255.0"}
+        host['networks']['management'] = {"ip" : self.esxip, "netmask" : "255.255.255.0", "gateway" : self.mgtgw}
+        host['networks']['vsan'] = {"ip" : self.vsanip, "netmask" : "255.255.255.0"}
+        host['networks']['vmotion'] = {"ip" : self.vmotionip, "netmask" : "255.255.255.0"}
+        host['networks']['witness'] = {"ip" : self.witness, "netmask" : "255.255.255.0"}
         host['geo_location'] = {}
         host['geo_location'] = {"rack_name" : module.params.get('rack_name'), "order_number" : module.params.get('rack_number')}
 
@@ -252,10 +249,10 @@ class vxrail():
         host['root_password'] = module.params.get('root_passwd')
         host["is_maintenance_mode"] = False
         host['networks'] = {}
-        host['networks']['management'] = {"ip" : module.params.get('mgt_ip'), "netmask" : "255.255.255.0", "gateway" : "172.17.0.1"}
-        host['networks']['vsan'] = {"ip": module.params.get('vsan_ip'), "netmask": "255.255.255.0"}
-        host['networks']['vmotion'] = {"ip" : module.params.get('vmotion_ip'), "netmask" : "255.255.255.0"}
-        host['networks']['witness'] = {"ip" : module.params.get('witness_ip'), "netmask" : "255.255.255.0"}
+        host['networks']['management'] = {"ip" : self.esxip, "netmask" : "255.255.255.0", "gateway" : self.mgtgw}
+        host['networks']['vsan'] = {"ip": self.vsanip, "netmask": "255.255.255.0"}
+        host['networks']['vmotion'] = {"ip" : self.vmotionip, "netmask" : "255.255.255.0"}
+        host['networks']['witness'] = {"ip" : self.witness, "netmask" : "255.255.255.0"}
         host['geo_location'] = {}
 #        host['geo_location'] = {"rack_name" : module.params.get('rack_name'), "order_number" : module.params.get('rack_number')}
         host['geo_location'] = {"rack_name" : "r1", "order_number" : "1"}
@@ -286,7 +283,7 @@ class vxrail():
         return request_id
 
 
-    def start_one_host_expansion(self, exp_json):
+    def start_one_host_expansion(self, hexp_json):
         ''' initiate cluster expansion '''
         request_id = ''
         LOGGER.info("Starting One Host expansion...")
@@ -297,20 +294,16 @@ class vxrail():
                                      verify=False,
                                      auth=self.auth,
                                      headers=headers,
-                                     data=(exp_json)
+                                     data=(hexp_json)
                                      )
             response.raise_for_status()
-            LOGGER.info(response.status_code)
-            LOGGER.info(response.content)
         except requests.exceptions.HTTPError as err:
             LOGGER.error('HTTP Request error: %s', err)
             module.fail_json(msg="Resonse error from url %s within %s seconds (timeout)" % (addnode_url, self.timeout))
 
-#        if response.status_code == '202':
         data = byte_to_json(response.content)
         LOGGER.info('Data %s', data)
         request_id = data['request_id']
-#        if request_id:
         return request_id
 
     def start_validation(self, exp_json):
@@ -318,7 +311,7 @@ class vxrail():
         response_json = []
         headers = {'Content-type': 'application/json'}
         try:
-            response = requests.post(url=self.expansion_urls.get_url_validation_start(),
+            response = requests.post(url=self.expansion_urls.post_url_validate_node(),
                                      verify=False,
                                      auth=self.auth,
                                      headers=headers,
@@ -398,7 +391,8 @@ class vxrail():
             LOGGER.info("The Cluster expansion has completed")
         elif expansion_status == 'FAILED':
             LOGGER.info('Expansion Task %s has failed.', task_id)
-            LOGGER.info(response_json['extension']['thoroughValidationFieldErrors'])
+            if response_json['extension']['thoroughValidationFieldErrors']:
+                LOGGER.info(response_json['extension']['thoroughValidationFieldErrors'])
             LOGGER.info(response_json['extension']['normalValidationFieldErrors'])
         else:
             LOGGER.info('Inner track_expansion method: %s', expansion_status)
@@ -461,9 +455,9 @@ def main():
         time.sleep(60)
     if validation_status == 'COMPLETED':
         expansion_json = vxrail().create_expansion_json(node, uplinks)
-        cluster_json = json.dumps(expansion_json)
-        LOGGER.info(cluster_json)
-        task_id = vxrail().start_expansion(cluster_json)
+        hexp_json = json.dumps(expansion_json)
+        LOGGER.info(hexp_json)
+        task_id = vxrail().start_expansion(hexp_json)
         LOGGER.info('Cluster_expansion: vxrail task_ID: %s.', task_id)
         while expansion_status not in ('COMPLETED', 'FAILED'):
             LOGGER.info("cluster_expansion: sleeping 60 seconds...")

@@ -2,12 +2,12 @@
 - name: Get Task Detail
   hosts: control
   gather_facts: false
-  vars:
-    vxrail_hosts: "{{vxm}}"
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
   tasks:
    - name: 
      uri:
-       url: "https://{{ vxrail_hosts }}/rest/vxm/v1/requests/{{id}}"
+       url: "https://{{ vxm }}/rest/vxm/v1/requests/{{id}}"
        headers:
         "Content-Type": "application/json"
         "Accept": "application/json"

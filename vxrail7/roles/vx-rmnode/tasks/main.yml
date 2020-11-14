@@ -9,7 +9,7 @@
       evacuate: yes
       timeout: 3600
       validate_certs: false
-      state: "{{ state }}"
+      state: "present"
     delegate_to: localhost
 
  - name: Sleep to allow VxM to update

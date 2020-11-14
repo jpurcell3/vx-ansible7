@@ -2,6 +2,114 @@
 # Copyright: (c) 2018, Jeff Purcell <jeff.purcell@dell.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'certified'}
+
+DOCUMENTATION = '''
+author: Dell EMC Ansible Team (@jpurcell3) <jeff.purcell@dell.com>
+description:
+  - "Add a node to an existing VxRail Cluster"
+
+module: vx_addnode
+
+options:
+
+  name:
+    description:
+      Name of the playbook task
+    required: false
+
+  ip:
+    description:
+      The IP address of the VxRail Manager System
+    required: true
+
+  vcadmin:
+    description:
+      Administrative account of the vCenter Server the VxRail Manager is registeried to
+    required: true
+
+  vcpasswd:
+    description:
+      The password for the administror account provided in vcadmin
+    required: true
+
+  esxhost:
+    description:
+      The ESXi Hostname of the host you wish to remove from the cluster
+    required: true
+
+  vxadmin:
+    description:
+      The ESX Administrative user.
+    required: true
+
+  vxpasswd:
+    description:
+      The vxadmin user password.
+    required: true
+
+  mgt_ip:
+    description:
+      The management address for the ESX Host.
+    required: true
+
+  mgt_gw:
+    description:
+      The management gateway address for the ESX Host.
+    required: true
+
+  vsan_ip:
+    description:
+      The vsan IP address for the ESX Host.
+    required: true
+
+  vmotion_ip:
+    description:
+      The vmotion IP address for the ESX Host.
+    required: true
+
+  wirness_ip:
+    description:
+      The witness IP address for the ESX Host.
+    required: true
+
+  Timeout:
+    description:
+      Time out value for the HTTP session to connect to the REST API
+    required: false
+
+short_description: VxRail Node Removal
+version_added: "2.9"
+
+
+'''
+EXAMPLES = """
+    - name: Add Node to existing VxRail Cluster
+      vx-addnode:
+        vcadmin: "{{ vcadmin }}"
+        vcpasswd: "{{ vcpasswd}}"
+        ip: "{{ vxm_ip }}"
+        esxhost: "{{ esxhost }}"
+        vxadmin: "{{ vxuser }}"
+        vxpasswd: "{{ vxpasswd }}"
+        mgt:_ip: "{{ mgt_ip }}"
+        mgt:_gw: "{{ mgt_gw }}"
+        vsan_ip: "{{ vsan_ip }}"
+        vmotion_ip: "{{ vmotion_ip }}"
+        root_passwd: "{{ root_passwd }}"
+    register: output
+
+   - debug:
+     msg: "{{ output }}"
+"""
+
+RETURN = """
+"""
+
+
+
 import time
 import json
 import logging
@@ -72,19 +180,19 @@ class ExpansionUrls():
     precheck_url_tpd = 'https://{}/rest/vxm/private/cluster/expansion/precheck'
     start_expansion_url_tpl = 'https://{}/rest/vxm/private/cluster/add-host'
     validate_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
-    validate_start_url_tpl = 'https://{}/rest/vxm/private/cluster/expansion/validate'
+    validate_node_url_tpl = 'https://{}/rest/vxm/private/cluster/expansion/validate'
 
     def __init__(self, vxm_ip):
         '''init method'''
         self.vxm_ip = vxm_ip
 
     def get_url_available_hosts(self):
-        '''map to vxrail list available hosts api'''
+        '''map to VxRail list available hosts api'''
         return ExpansionUrls.available_hosts_url_tpl.format(self.vxm_ip)
 
-    def get_url_validation_start(self):
-        '''map to vxrail validate compatable hosts API'''
-        return ExpansionUrls.validate_start_url_tpl.format(self.vxm_ip)
+    def post_url_validate_node(self):
+        '''map to VxRail validate compatable hosts API'''
+        return ExpansionUrls.validate_node_url_tpl.format(self.vxm_ip)
 
     def get_url_validation_progress(self, job_id):
         '''Maps to VxRail API: validation task progress'''
@@ -103,7 +211,7 @@ class ExpansionUrls():
         return ExpansionUrls.precheck_url_tpd.format(self.vxm_ip)
 
 
-class vxrail():
+class VxRail():
     ''' Root Class for all mathods '''
     def __init__(self):
         self.esxip = module.params.get('mgt_ip')
@@ -309,12 +417,11 @@ class vxrail():
     def start_validation(self, exp_json):
         ''' validate the pre-check '''
         response_json = []
-        headers = {'Content-type': 'application/json'}
         try:
-            response = requests.post(url=self.expansion_urls.get_url_validation_start(),
+            response = requests.post(url=self.expansion_urls.post_url_validate_node(),
                                      verify=False,
                                      auth=self.auth,
-                                     headers=headers,
+                                     headers={'Content-type': 'application/json'},
                                      data=json.dumps(exp_json)
                                      )
             response.raise_for_status()
@@ -362,6 +469,11 @@ class vxrail():
                 LOGGER.info(response_json['extension']['normalValidationFieldErrors'])
                 LOGGER.info(response_json['extension']['thoroughValidationFieldErrors'])
             else:
+                index = int(response_json['extension']['number_of_executed_steps'])
+                LOGGER.info(response_json)
+                index -= 1
+                summary = response_json['extension']['steps'][index]['summary']
+                LOGGER.info('Validation Task: %s', summary)
                 time.sleep(10)
         return validation_status
 
@@ -379,7 +491,7 @@ class vxrail():
             LOGGER.error(http_err)
             LOGGER.error('Cannot connect to VxRail Manager %s.', self.vxm_ip)
 
-        LOGGER.info(response.status_code)
+#        LOGGER.info(response.status_code)
         response_json = byte_to_json(response.content)
         total_steps = response_json['extension']['number_of_total_steps']
         current_step = response_json['extension']['number_of_executed_steps']
@@ -395,7 +507,10 @@ class vxrail():
                 LOGGER.info(response_json['extension']['thoroughValidationFieldErrors'])
             LOGGER.info(response_json['extension']['normalValidationFieldErrors'])
         else:
-            LOGGER.info('Inner track_expansion method: %s', expansion_status)
+            LOGGER.info(response_json)
+            current_step -= 1
+            summary = response_json['extension']['steps'][current_step]['summary']
+            LOGGER.info('Expansion Task: %s', summary)
             time.sleep(10)
 
         return expansion_status
@@ -433,7 +548,7 @@ def main():
     validation_status = 0
     node_list = []
     expansion_status = 0
-    node_list = vxrail().get_nodes()
+    node_list = VxRail().get_nodes()
     if (not node_list) or (node_list == 'error'):
         module.fail_json(msg="Module failed to get a connect to VxRail Manager")
     LOGGER.info('VxRail Node inventory completed.')
@@ -444,25 +559,25 @@ def main():
     else:
         node = node_list.pop()
         LOGGER.info('node_check: %s will be used for expansion', node)
-        exp_json = vxrail().create_validation_json(node, uplinks)
+        exp_json = VxRail().create_validation_json(node, uplinks)
         LOGGER.info('node_check: %s.', exp_json)
-        jobid = vxrail().start_validation(exp_json)
+        jobid = VxRail().start_validation(exp_json)
         LOGGER.info('node_check: VxRail task id: %s.', jobid)
     LOGGER.info('Checking to see if we have what we need for the deployment...')
     while validation_status not in ('COMPLETED', 'FAILED'):
-        validation_status = vxrail().get_validation_status(jobid)
-        LOGGER.info("validation: Sleeping 60 seconds before checking for status...")
-        time.sleep(60)
+        validation_status = VxRail().get_validation_status(jobid)
+        LOGGER.info("Validation Task: Sleeping 2 minutes...")
+        time.sleep(118)
     if validation_status == 'COMPLETED':
-        expansion_json = vxrail().create_expansion_json(node, uplinks)
+        expansion_json = VxRail().create_expansion_json(node, uplinks)
         hexp_json = json.dumps(expansion_json)
         LOGGER.info(hexp_json)
-        task_id = vxrail().start_expansion(hexp_json)
-        LOGGER.info('Cluster_expansion: vxrail task_ID: %s.', task_id)
+        task_id = VxRail().start_expansion(hexp_json)
+        LOGGER.info('Cluster_expansion: VxRail task_ID: %s.', task_id)
         while expansion_status not in ('COMPLETED', 'FAILED'):
             LOGGER.info("cluster_expansion: sleeping 60 seconds...")
             time.sleep(60)
-            expansion_status = vxrail().track_expansion_status(task_id)
+            expansion_status = VxRail().track_expansion_status(task_id)
             LOGGER.info('cluster_expansion: track_expansion status: %s', expansion_status)
     else:
         expansion_status = validation_status
