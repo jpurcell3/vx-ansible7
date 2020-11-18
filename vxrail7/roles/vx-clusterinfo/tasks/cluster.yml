@@ -7,7 +7,6 @@
      vcpasswd: "{{ vcpasswd }}"
    register: clinfo
      
-
  - debug:
 #     msg: "VxRail: {{vxm}}, State: {{ansible_facts.state}}"
-     msg: "{{ clinfo }}"
+     msg: "{{ clinfo.ansible_facts }}"

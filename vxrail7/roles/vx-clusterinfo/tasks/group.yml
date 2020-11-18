@@ -8,15 +8,15 @@
    register: vx
    loop: "{{ grp }}"
      
-# - name: set facts
-#   set_fact:
-#       status:  "{{ status | default([]) + [{'Cluster': item.item, 'State': item.ansible_facts.state}] }}"
-#   loop: "{{ vx.results }}"
-#   no_log: true
+ - name: set facts
+   set_fact:
+       status:  "{{ status | default([]) + [{'Cluster': item.item, 'State': item.ansible_facts.state, 'Version': item.ansible_facts.version, 'Type': item.ansible_facts.cluster_type}] }}"
+   loop: "{{ vx.results }}"
+   no_log: true
 
-# - debug:
-#     var: status
-#     msg: "{{ status }}"
-     
  - debug:
-     msg: "{{ vx }}"
+#     var: status
+     msg: "{{ status }}"
+     
+# - debug:
+#     msg: "{{ vx }}"

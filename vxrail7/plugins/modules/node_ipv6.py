@@ -83,19 +83,23 @@ class VxRail():
                                     )
             response.raise_for_status()
         except HTTPError as http_err:
-            LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
-            return 'error'
+            LOGGER.error("HTTP error %s request to VxRail Manager", http_err)
+            message = byte_to_json(response.content)
+            LOGGER.error(message['message'])
+            module.fail_json(msg=message)
         except Exception as api_exception:
             LOGGER.error(' %s Cannot connect to VxRail Manager %s', api_exception, self.vxm_ip)
             return 'error'
 
         if response.status_code == 200:
             data = byte_to_json(response.content)
-        for i, t in enumerate(data):
-            ipv6_address = data[i].get('primary_ip')
-            ipv6_addr_list.append(ipv6_address)
-
-        return ipv6_addr_list
+            for i, t in enumerate(data):
+                ipv6_address = data[i].get('primary_ip')
+                ipv6_addr_list.append(ipv6_address)
+            return ipv6_addr_list
+        if response.status_code == 400:
+            message = response.content['message']
+            module.fail_json(msg=message)
 
 def main():
     ''' entry point into module exeution '''

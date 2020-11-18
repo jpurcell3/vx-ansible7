@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 '''
 # Copyright: (c) 2018, Jeff Purcell <jeff.purcell@dell.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -11,10 +12,11 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = '''
 author:  Dell EMC VxRail Ansible Team (@jpurcell3) <jeff.purcell@dell.com>
-module: vx_health
-short_description: This module provides cluster health status
+module: vx_nodes
+short_description: This module is used a simple tool to return the inventory of confirued nodes.
 
-description: The module is used to gather the status of the system health. It is also a lightweight task that can be used to check VxRail Manager connectivity
+description: VxRail API to return the inventory. It is useful as a method to identify nodes or hosts for other modules that support the host parameter. 
+ - VxRail Manager has been deployed and is in good health
  - DNS settings have been applied for the new node host name and IP IPv4Address
  - Network configuration has been performed to support the additional network space required for the nodes.
 
@@ -56,11 +58,10 @@ vserion_added: "2.9"
 '''
 EXAMPLES = """
  - name: collect cluster network address usage
-   vx_health:
+   vx_nodes:
      vcadmin: "{{ vcadmin }}"
      vcpasswd: "{{ vcpasswd}}"
-     ip: "{{ vxm }}"
-     host: "{{ host }}"
+     vxm: "{{ vxm }}"
    register: output
 
  - debug:
@@ -70,17 +71,19 @@ EXAMPLES = """
 RETURN = """
 """
 
+
 import json
 import logging
 import requests
 import chardet
+import urllib3
 from requests.exceptions import HTTPError
 from ansible.module_utils.basic import AnsibleModule
 
-requests.urllib3.disable_warnings(requests.urllib3.exceptions.InsecureRequestWarning)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class CustomLogFormatter(logging.Formatter):
-    ''' class to provide logging functions to module '''
+    ''' Logging Class for Module '''
     info_fmt = "%(asctime)s [%(levelname)s]\t%(message)s"
     debug_fmt = "%(asctime)s [%(levelname)s]\t%(pathname)s:%(lineno)d\t%(message)s"
 
@@ -102,60 +105,56 @@ class CustomLogFormatter(logging.Formatter):
         return result
 
 def byte_to_json(body):
-    ''' method primarily used to convert http content '''
-    info_fmt = "%(asctime)s [%(levelname)s]\t%(message)s"
+    ''' Method for converting http content to json format'''
     return json.loads(body.decode(chardet.detect(body)["encoding"]))
 
-
 # Configurations
-LOG_FILE_NAME = "/tmp/vx-health.log"
+LOG_FILE_NAME = "/tmp/vx-hostinfo.log"
 LOG_FORMAT = CustomLogFormatter()
-
-# Disable package info
-logging.getLogger('requests').setLevel(logging.WARNING)
-logging.getLogger('urllib3').setLevel(logging.WARNING)
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
 
 # file output
-FILEHANDLER = logging.FileHandler(LOG_FILE_NAME)
-FILEHANDLER.setLevel(logging.DEBUG)
-FILEHANDLER.setFormatter(LOG_FORMAT)
-LOGGER.addHandler(FILEHANDLER)
+FILE_HANDLER = logging.FileHandler(LOG_FILE_NAME)
+FILE_HANDLER.setLevel(logging.DEBUG)
+FILE_HANDLER.setFormatter(LOG_FORMAT)
+LOGGER.addHandler(FILE_HANDLER)
 
 class ExpansionUrls():
-    ''' mapping class for vxrail apis '''
-    system_url_tpl = 'https://{}/rest/vxm/v1/system'
+    ''' Mapping class for VxRail APIs '''
     hosts_url_tpl = 'https://{}/rest/vxm/v1/hosts'
     node_url_tpl = 'https://{}/rest/vxm/v1/hosts/{}'
 
     def __init__(self, vxm_ip):
         self.vxm_ip = vxm_ip
 
-    def get_system(self):
-        ''' map to get system properties '''
-        return ExpansionUrls.system_url_tpl.format(self.vxm_ip)
+    def get_hosts(self):
+        ''' VxRail get node list api '''
+        return ExpansionUrls.hosts_url_tpl.format(self.vxm_ip)
+
+    def get_node(self, node_sn):
+        ''' VxRail get node details api '''
+        return ExpansionUrls.node_url_tpl.format(self.vxm_ip, node_sn)
+
 
 class VxRail():
-    ''' primary class for module functions or methods '''
+    ''' main module class for all methods '''
     def __init__(self):
         self.vxm_ip = module.params.get('ip')
-        self.timeout = module.params.get('timeout')
         self.vcadmin = module.params.get('vcadmin')
         self.vcpasswd = module.params.get('vcpasswd')
-        self.auth = self.vcadmin, self.vcpasswd
+        self.esx = module.params.get('host')
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
-    def syshealth(self):
-        ''' query for host details '''
-        vxm = {}
-        response = requests
-
+    def get_host(self):
+        ''' doc '''
+        rpt = []
+        host = {}
         try:
-            response = requests.get(url=self.expansion_urls.get_system(),
+            response = requests.get(url=self.expansion_urls.get_hosts(),
                                     verify=False,
-                                    auth=self.auth
+                                    auth=(self.vcadmin, self.vcpasswd),
                                     )
             response.raise_for_status()
         except HTTPError as http_err:
@@ -167,29 +166,85 @@ class VxRail():
 
         if response.status_code == 200:
             data = byte_to_json(response.content)
-            vxm['state'] = data['health']
-        return vxm
+            if not data:
+                return "No available hosts"
+        for item in data:
+            hostname = item.get('hostname')
+            if hostname != self.esx:
+                pass
+            else:
+                host['Hostname'] = hostname
+                host['Id'] = item.get('id')
+                host['Health'] = item.get('health')
+                host['Operational_Status'] = item.get('operational_status')
+                if not host['Health'] == "Healthy":
+                    LOGGER.error('System %s has errors.', host['Hostname'])
+                rpt.append(dict(host))
+        return rpt
+
+
+    def get_allhosts(self):
+        ''' doc '''
+        rpt = []
+        host = {}
+        try:
+            response = requests.get(url=self.expansion_urls.get_hosts(),
+                                    verify=False,
+                                    auth=(self.vcadmin, self.vcpasswd),
+                                    )
+            response.raise_for_status()
+        except HTTPError as http_err:
+            LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
+            return 'error'
+        except Exception as api_exception:
+            LOGGER.error(' %s Cannot connect to VxRail Manager %s', api_exception, self.vxm_ip)
+            return 'error'
+
+        if response.status_code == 200:
+            data = byte_to_json(response.content)
+            if not data:
+                return "No available hosts"
+            for item in data:
+                host['Hostname'] = item.get('hostname')
+                host['Id'] = item.get('id')
+                host['Health'] = item.get('health')
+                host['Operational_Status'] = item.get('operational_status')
+                if not host['Health'] == "Healthy":
+                    LOGGER.error('System %s has errors.', host['Hostname'])
+                rpt.append(dict(host))
+        return rpt
+
 
 def main():
-    ''' entry point into module exeution '''
+    ''' doc '''
+    result = ''
     global module
     module = AnsibleModule(
         argument_spec=dict(
             name=dict(required=False),
-            vcadmin=dict(required=True),
+            vcadmin=dict(default='administrator@vsphere.local'),
             vcpasswd=dict(required=True, no_log=True),
             ip=dict(required=True),
-            timeout=dict(type='int', default=10),
+            host=dict(required=False),
             ),
         supports_check_mode=True,
     )
 
-    result = VxRail().syshealth()
+    if (not(module.params.get('host')) or (module.params.get('host') == 'all')):
+        result = VxRail().get_allhosts()
+    else:
+        result = VxRail().get_host()
     LOGGER.info(result)
 
     if result == 'error':
         module.fail_json(msg="VxRail Manager is unreachable")
 
+    if (len(result)) == 0:
+        module.fail_json(msg="No hosts found. Confirm hostname and retry")
+
+    vx_facts = {'hosts' : result}
+    vx_facts_result = dict(changed=False, ansible_facts=vx_facts)
+    module.exit_json(**vx_facts_result)
 
     vx_facts_result = dict(changed=False, ansible_facts=result)
     module.exit_json(**vx_facts_result)

@@ -1,5 +1,5 @@
 ---
-- name: Get the VxRail host health"
+- name: Get VxRail Cluster details"
   hosts: localhost
   gather_facts: no
   vars:

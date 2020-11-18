@@ -161,12 +161,6 @@ logging.getLogger('urllib3').setLevel(logging.WARNING)
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
 
-# console ouput
-CONSOLEHANDLER = logging.StreamHandler()
-CONSOLEHANDLER.setLevel(logging.INFO)
-CONSOLEHANDLER.setFormatter(LOG_FORMAT)
-LOGGER.addHandler(CONSOLEHANDLER)
-
 # file output
 FILEHANDLER = logging.FileHandler(LOG_FILE_NAME)
 FILEHANDLER.setLevel(logging.DEBUG)
@@ -177,10 +171,11 @@ class ExpansionUrls():
     ''' Class performs mapping of VxRail APIs and class methods called within the module '''
     available_hosts_url_tpl = 'https://{}/rest/vxm/v1/system/available-hosts'
     expansion_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
-    precheck_url_tpd = 'https://{}/rest/vxm/private/cluster/expansion/precheck'
+    precheck_url_tpl = 'https://{}/rest/vxm/private/cluster/expansion/precheck'
     start_expansion_url_tpl = 'https://{}/rest/vxm/private/cluster/add-host'
     validate_progress_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
     validate_node_url_tpl = 'https://{}/rest/vxm/private/cluster/expansion/validate'
+    ipaddress_url_tpl = 'https://{}/rest/vxm/private/system/network-info'
 
     def __init__(self, vxm_ip):
         '''init method'''
@@ -208,7 +203,12 @@ class ExpansionUrls():
 
     def get_url_precheck(self):
         '''Map to VxRail node pre-check api'''
-        return ExpansionUrls.precheck_url_tpd.format(self.vxm_ip)
+        return ExpansionUrls.precheck_url_tpl.format(self.vxm_ip)
+
+    def get_url_management_ips(self):
+        '''Map to VxRail node pre-check api'''
+        return ExpansionUrls.ipaddress_url_tpl.format(self.vxm_ip)
+
 
 
 class VxRail():
@@ -292,6 +292,35 @@ class VxRail():
                 return nodes
         else:
             return "No compatable hosts"
+
+    def check_iplist(self):
+        ''' Return a list of available nodes '''
+        response = {}
+        try:
+            response = requests.get(url=self.expansion_urls.get_url_management_ips(),
+                                    verify=False,
+                                    auth=self.auth,
+                                    timeout=self.timeout)
+
+        except Exception as http_err:
+            LOGGER.error(http_err)
+            LOGGER.error('Cannot connect to VxRail Manager %s.', self.vxm_ip)
+
+        if response.status_code == 200:
+            data = byte_to_json(response.content)
+            LOGGER.info(data)
+            mgt_iplist = data['management']['ip_list']
+            vsan_iplist = data['vsan']['ip_list']
+            vmotion_iplist = data['vmotion']['ip_list']
+            LOGGER.info('Allocated Management addresses %s', mgt_iplist)
+            LOGGER.info('Allocated VSAN addresses %s', vsan_iplist)
+            LOGGER.info('Allocated Management addresses %s', vmotion_iplist)
+            if self.esxip in mgt_iplist:
+                module.fail_json(msg="The specified management address is already in use")
+            if self.vsanip in vsan_iplist:
+                module.fail_json(msg="The specified VSAN address is already in use")
+            if self.vmotionip in vmotion_iplist:
+                module.fail_json(msg="The specified VMotion address is already in use")
 
     def create_validation_json(self, nodes, uplinks):
         ''' validate list of nodes as expansion candidates '''
@@ -538,6 +567,7 @@ def main():
         supports_check_mode=True,
     )
 
+    # To Do: Enumerate the hosts to obtain the network  network profile
     uplinks = []
     for i in range(0, 2):
         link = {}
@@ -545,6 +575,7 @@ def main():
         link['physical_nic'] = "vmnic" + str(i)
         uplinks.append(link)
 
+    result = VxRail().check_iplist()
     validation_status = 0
     node_list = []
     expansion_status = 0

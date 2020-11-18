@@ -41,5 +41,5 @@
   - dellemc.vxrail
   tasks:
   - include_role:
-      name: vx-upgrade
+      name: vx7-upgrade
     tags: upgrade

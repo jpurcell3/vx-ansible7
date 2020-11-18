@@ -2,12 +2,12 @@
 # tasks file for host information
  - name: Get Cluster Hosts
    dellemc.vxrail.vx_nodes:
-     ip: "{{vxm}}"
-     vcadmin: "{{vcadmin}}"
-     vcpasswd: "{{vcpasswd}}"
-     host: "{{host}}"
+     ip: "{{ vxm }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+     host: "{{ host }}"
    register: dict
 
  - debug:
-     msg: "{{ dict }}"
+     msg: "{{  dict  }}"
    when: dict

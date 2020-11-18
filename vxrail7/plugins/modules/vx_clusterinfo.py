@@ -146,7 +146,7 @@ class VxRail():
         self.auth = self.vcadmin, self.vcpasswd
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
-    def syshealth(self):
+    def cluster_info(self):
         ''' query for host details '''
         vxm = {}
         response = requests
@@ -172,6 +172,7 @@ class VxRail():
             vxm['External VC'] = data['is_external_vc']
             vxm['Host Count'] = data['number_of_host']
             vxm['state'] = data['health']
+            vxm['name'] = module.params.get('ip')
         return vxm
 
 def main():
@@ -188,7 +189,7 @@ def main():
         supports_check_mode=True,
     )
 
-    result = VxRail().syshealth()
+    result = VxRail().cluster_info()
     LOGGER.info(result)
 
     if result == 'error':
