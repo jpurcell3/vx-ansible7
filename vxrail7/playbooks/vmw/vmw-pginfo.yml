@@ -5,28 +5,28 @@
   collections:
   - vmware
   tasks:
-  - name: port group mtu setting
+  - name: "{{ vcenter }} port group mtu setting"
     vmware_portgroup_info:
       hostname: "{{ vcenter }}"
       username: "{{ vcadmin }}"
       password: "{{ vcpasswd }}"
+      cluster_name: "{{ cluster_name }}"
       validate_certs: false
     delegate_to: localhost
-    register: pginfo
+    register: vcenter_pginfo
 
   - debug:
-      msg: "{{ pginfo }}"
+      msg: "{{ vcenter_pginfo }}"
 
-  - name: VMernel Info
-    vmware_vmkernel_info:
+  - name: "{{ esxhost }} port group mtu setting"
+    vmware_portgroup_info:
       hostname: "{{ vcenter }}"
       username: "{{ vcadmin }}"
       password: "{{ vcpasswd }}"
-      esxi_hostname: "{{ esx }}"
+      esxi_hostname: "{{ esxhost }}"
       validate_certs: false
     delegate_to: localhost
-    register: vmkinfo
+    register: esx_pginfo
 
-# - name: Change MTU value
-#   vmware_vmkernel: 
-#     jmesquery: "{id: id, task: owner, state: state, complete: progress}"
+  - debug:
+      msg: "{{ esx_pginfo }}"

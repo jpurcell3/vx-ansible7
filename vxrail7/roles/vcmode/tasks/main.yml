@@ -5,7 +5,7 @@
      ip: "{{ vxm }}"
      vcadmin: "{{ vcadmin }}"
      vcpasswd: "{{ vcpasswd }}"
-     mode: "external"
+     mode: "{{ mode }}"
     register: vx_facts
 
  - name: "Display Results"

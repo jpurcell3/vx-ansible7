@@ -35,4 +35,10 @@
         - Progress: "{{ request.json.progress }}"
         - Error: "{{ request.json.error }}"
      when: request.json.state == "FAILED"
-    
+
+   - debug:
+       msg:
+        - State: "{{ request.json.state }}"
+        - Progress: "{{ request.json.progress }}"
+        - Task: "{{ request.json.detail }}"
+     when: request.json.state == "IN_PROGRESS"

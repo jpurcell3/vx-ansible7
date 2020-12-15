@@ -8,7 +8,7 @@
   collections:
   - vmware
   tasks:
-  - name: Collect VM uuids
+  - name: Maint Mode test
     vmware_vm_info:
       hostname: "{{ vcenter }}"
       username: "{{ vcadmin }}"
@@ -18,30 +18,23 @@
     register: vm_info
 
   - set_fact:
-      uuids: "{{ uuids + [item.uuid] }}"
+      uuids:  "{{ uuids + [item.uuid] }}"
     with_items:
       - "{{ vm_info.virtual_machines }}"
 
   - debug:
       msg: "{{ uuids }}"
 
-  - name: Create VM Snapshot
+  - name: Delete VM Snapshot
     vmware_guest_snapshot:
       hostname: "{{ vcenter }}"
       username: "{{ vcadmin }}"
       password: "{{ vcpasswd }}"
       datacenter: "{{ datacenter_name }}"
       uuid: "{{ item }}"
-      state: present
-      snapshot_name: pre-vcmode
+      state: absent
+      snapshot_name: snap01
       description: "pre-upgrade"
       validate_certs: false
     delegate_to: localhost
     with_items: "{{ uuids }}"
-
-- hosts: localhost
-  collections:
-  - dellemc.vxrail
-  roles:
-    - vcmode
-

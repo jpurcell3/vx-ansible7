@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+  collections:
+  - vmware
+  tasks:
+  - name: VMernel Info
+    vmware_vmkernel_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      esxi_hostname: "{{ esx }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vmkinfo
+
+ - name: Change MTU value
+   vmware_vmkernel: 
+     jmesquery: "{id: id, task: owner, state: state, complete: progress}"

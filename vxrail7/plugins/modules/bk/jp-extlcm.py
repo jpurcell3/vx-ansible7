@@ -1,6 +1,16 @@
 #!/usr/bin/python3
 # Copyright: (c) 2018, Jeff Purcell <jeff.purcell@dell.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+import time
+import datetime
+import json
+import logging
+import requests
+import chardet
+import urllib3
+from requests.exceptions import HTTPError
+from ansible.module_utils.basic import AnsibleModule
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -97,19 +107,7 @@ EXAMPLES = """
 RETURN = """
 """
 
-import time
-import datetime
-import json
-import logging
-import requests
-import chardet
-import urllib3
-from requests.exceptions import HTTPError
-from ansible.module_utils.basic import AnsibleModule
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 class CustomLogFormatter(logging.Formatter):
-    ''' Docstring '''
     info_fmt = "%(asctime)s [%(levelname)s]\t%(message)s"
     debug_fmt = "%(asctime)s [%(levelname)s]\t%(pathname)s:%(lineno)d\t%(message)s"
 
@@ -131,11 +129,10 @@ class CustomLogFormatter(logging.Formatter):
         return result
 
 def byte_to_json(body):
-    ''' Docstring '''
     return json.loads(body.decode(chardet.detect(body)["encoding"]))
 
 # Configurations
-LOG_FILE_NAME = datetime.datetime.now().strftime('/tmp/vx-lcm-%m%d.log')
+LOG_FILE_NAME = datetime.datetime.now().strftime('/tmp/vx-extvc-lcm-%Y%m%d.log')
 LOG_FORMAT = CustomLogFormatter()
 
 # Disable package info
@@ -145,40 +142,33 @@ logging.getLogger('urllib3').setLevel(logging.WARNING)
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
 
+# console ouput
+CONSOLE_HANDLER = logging.StreamHandler()
+CONSOLE_HANDLER.setLevel(logging.INFO)
+CONSOLE_HANDLER.setFormatter(LOG_FORMAT)
+
 # file output
 FILE_HANDLER = logging.FileHandler(LOG_FILE_NAME)
 FILE_HANDLER.setLevel(logging.DEBUG)
 FILE_HANDLER.setFormatter(LOG_FORMAT)
 LOGGER.addHandler(FILE_HANDLER)
 
+
 class ExpansionUrls():
-    ''' docstring '''
     request_url_tpl = 'https://{}/rest/vxm/v1/requests/{}'
-    url_get_system_tpl = 'https://{}/rest/vxm/v1/system'
-    v1_lcm_url_tpl = 'https://{}/rest/vxm/v1/lcm/upgrade'
-    v2_lcm_url_tpl = 'https://{}/rest/vxm/v2/lcm/upgrade'
+    lcm_url_tpl = 'https://{}/rest/vxm/v1/lcm/upgrade'
+#    lcm_url_tpl = 'https://{}/rest/vxm/v2/lcm/upgrade'
 
     def __init__(self, vxm_ip):
         self.vxm_ip = vxm_ip
 
-    def get_system(self):
-        ''' docstring '''
-        return ExpansionUrls.url_get_system_tpl.format(self.vxm_ip)
-
-    def post_v1_url_lcm(self):
-        ''' docstring '''
-        return ExpansionUrls.v1_lcm_url_tpl.format(self.vxm_ip)
-
-    def post_v2_url_lcm(self):
-        ''' docstring '''
-        return ExpansionUrls.v2_lcm_url_tpl.format(self.vxm_ip)
+    def post_url_lcm(self):
+        return ExpansionUrls.lcm_url_tpl.format(self.vxm_ip)
 
     def upgrade_progress(self, job_id):
-        ''' docstring '''
         return ExpansionUrls.request_url_tpl.format(self.vxm_ip, job_id)
 
 class VxRail():
-    ''' docstring '''
     def __init__(self):
         self.vxm_ip = module.params.get('ip')
         self.bundle = module.params.get('bundle')
@@ -200,30 +190,10 @@ class VxRail():
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
     def extvc_json(self):
-        ''' doctstring '''
         lcm_json = {}
         lcm_json['bundle_file_locator'] = self.bundle
-        lcm_json['drs_preference'] = {"suggestionAccepted": 'true'}
-        vcenter_dict = {}
-        vcenter_dict['psc_root_user'] = {'username' : self.pscroot, 'password' : self.pscpasswd}
-        vcenter_dict['vc_admin_user'] = {'username' : self.vcadmin, 'password' : self.vcpasswd}
-        vcenter_dict['vcsa_root_user'] = {'username' : self.vcroot, 'password' : self.vcrootpasswd}
-        lcm_json['vcenter'] = vcenter_dict
-        vxrail_dict = {}
-        vxrail_dict['vxm_root_user'] = {'username' : 'root', 'password' : self.vcpasswd}
-        lcm_json['vxrail'] = vxrail_dict
-        witness_dict = {}
-        witness_dict['auto_witness_upgrade'] = 'true'
-        witness_dict['witness_user'] = {'username' : self.pscroot, 'password' : self.pscpasswd}
-        lcm_json['witness'] = witness_dict
-        LOGGER.info(lcm_json)
-        return lcm_json
-
-    def intvc_json(self):
-        ''' Method to construct the JSON payload for the upgrade task  with embedded vCenter'''
-        lcm_json = {}
-        lcm_json['bundle_file_locator'] = self.bundle
-        lcm_json['drs_preference'] = {"suggestionAccepted": 'true'}
+        lcm_json['upgrade_sequence'] = {"preferred_fault_domain_first": 'true'}
+#        lcm_json['drs_preference'] = {"suggestionAccepted": 'true'}
         vcenter_dict = {}
         vcenter_dict['psc_root_user'] = {'username' : self.pscroot, 'password' : self.pscpasswd}
         vcenter_dict['vc_admin_user'] = {'username' : self.vcadmin, 'password' : self.vcpasswd}
@@ -240,12 +210,10 @@ class VxRail():
         return lcm_json
 
 
-
-    def v1_upgrade(self, lcm_json):
-        ''' Version 1 API branch for VxRail prior to 7.x '''
+    def upgrade_cluster(self, lcm_json):
         response = ''
         try:
-            response = requests.post(url=self.expansion_urls.post_v1_url_lcm(),
+            response = requests.post(url=self.expansion_urls.post_url_lcm(),
                                      verify=False,
                                      auth=self.auth,
                                      headers={'Content-type': 'application/json'},
@@ -253,7 +221,6 @@ class VxRail():
                                      )
             response.raise_for_status()
         except HTTPError as http_err:
-            LOGGER.error(response.content)
             LOGGER.error('HTTP error %s request to VxRail Manager %s', http_err, self.vxm_ip)
             return 'error'
         except Exception as err:
@@ -264,46 +231,16 @@ class VxRail():
         LOGGER.info('HTTP Response ID: %s', response.status_code)
         if response.status_code == 202:
             response_json = byte_to_json(response.content)
+            task_id = response_json['request_id']
+            LOGGER.info('Pre-validation task started with request id: %s', task_id)
+            return
         if 'request_id' not in response_json.keys():
             raise Exception(response_json)
-        
-        task_id = response_json['request_id']
-        LOGGER.info('Pre-validation task started with request id: %s', task_id)
         return task_id
-
-    def v2_upgrade(self, lcm_json):
-        ''' Version 2 API branch for VxRail 7 and later '''
-        response = ''
-        try:
-            response = requests.post(url=self.expansion_urls.post_v2_url_lcm(),
-                                     verify=False,
-                                     auth=self.auth,
-                                     headers={'Content-type': 'application/json'},
-                                     data=json.dumps(lcm_json)
-                                     )
-            response.raise_for_status()
-        except HTTPError as http_err:
-            LOGGER.error(response.content)
-            LOGGER.error('HTTP error %s request to VxRail Manager %s', http_err, self.vxm_ip)
-            return 'error'
-        except Exception as err:
-            LOGGER.error('%s cannot connect to VxRail Manager %s', err, self.vxm_ip)
-            return 'error'
-
-        LOGGER.info(response)
-        LOGGER.info('HTTP Response ID: %s', response.status_code)
-        if response.status_code == 202:
-            response_json = byte_to_json(response.content)
-        if 'request_id' not in response_json.keys():
-            raise Exception(response_json)
-        task_id = response_json['request_id']
-        LOGGER.info('Pre-validation task started with request id: %s', task_id)
-        return task_id
-
 
     def track_upgrade_progress(self, job_id):
         ''' get task progress '''
-        upgrade_progress = ''
+        upgrade_progress = 'incomplete'
         response_json = []
         session = requests.Session()
         try:
@@ -316,9 +253,8 @@ class VxRail():
             LOGGER.error('Cannot connect to VxRail Manager %s.', self.vxm_ip)
             return 'error'
 
-        if response:
+        if response.status_code == 200:
             response_json = byte_to_json(response.content)
-        if response_json:
             upgrade_progess = response_json.get('state')
             upgrade_task = response_json.get('detail')
             progress = response_json.get('progress')
@@ -327,43 +263,19 @@ class VxRail():
             LOGGER.info('Current Task: %s', upgrade_task)
             if upgrade_progess == 'COMPLETED':
                 LOGGER.info("VxRail task has completed")
-            elif upgrade_progess == 'FAILED':
+                return upgrade_progress
+            if upgrade_progess == 'FAILED':
                 errors = response_json['extension']['errors'][0]
                 LOGGER.error(errors['action'])
                 LOGGER.error(errors['message'])
-            else:
-                time.sleep(60)
-        return upgrade_progess
+                return upgrade_progress
+            return upgrade_progress
+            time.sleep(60)
+        else:
+            return upgrade_progress
 
-    def cluster_version(self):
-        ''' query for cluster version '''
-        vxm = {}
-        response = requests
-
-        try:
-            response = requests.get(url=self.expansion_urls.get_system(),
-                                    verify=False,
-                                    auth=self.auth
-                                    )
-            response.raise_for_status()
-        except HTTPError as http_err:
-            LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
-            return 'error'
-        except Exception as api_exception:
-            LOGGER.error(' %s Cannot connect to VxRail Manager %s', api_exception, self.vxm_ip)
-            return 'error'
-
-        if response.status_code == 200:
-            data = byte_to_json(response.content)
-            LOGGER.info(data)
-            vxm['version'] = data['version'][0:3]
-            vxm['ext_vc'] = data['is_external_vc']
-            vxm['Host Count'] = data['number_of_host']
-            vxm['state'] = data['health']
-        return vxm
 
 def main():
-    ''' Program execution start point '''
     global module
     module = AnsibleModule(
         argument_spec=dict(
@@ -385,22 +297,15 @@ def main():
     LOGGER.info(module.params)
     bundle = (module.params.get('bundle'))
     LOGGER.info(bundle)
-    version = VxRail().cluster_version()
-    if version.get('ext_vc') == 'true':
-        lcm_json = VxRail().extvc_json()
-    else:
-        lcm_json = VxRail().intvc_json()
+    lcm_json = VxRail().extvc_json()
     LOGGER.info(lcm_json)
-    if version.get('version') in ("4.5", "4.7"):
-        taskid = VxRail().v1_upgrade(lcm_json)
-    else:
-        taskid = VxRail().v2_upgrade(lcm_json)
+    taskid = VxRail().upgrade_cluster(lcm_json)
     if taskid == 'error':
         module.fail_json(msg="VxRail LCM has failed. See /tmp/vx-lcm.log for details")
 
     LOGGER.info('vxrail_lcm: vxrail task_ID: %s.', taskid)
     while upgrade_status not in ('COMPLETED', 'FAILED'):
-        LOGGER.info("vxrail_lcm: sleeping 60 seconds...")
+        LOGGER.info("vxrail_lcm: sleeping 120 seconds...")
         time.sleep(60)
         upgrade_status = VxRail().track_upgrade_progress(taskid)
         LOGGER.info('vxrail_lcm: track_upgrade_status: %s', upgrade_status)

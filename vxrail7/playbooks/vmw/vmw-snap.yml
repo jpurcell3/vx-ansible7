@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
   gather_facts: no
   vars:
    uuids: []
@@ -31,7 +33,7 @@
       datacenter: "{{ datacenter_name }}"
       uuid: "{{ item }}"
       state: present
-      snapshot_name: snap2
+      snapshot_name: snap01
       description: "pre-upgrade"
       validate_certs: false
     delegate_to: localhost

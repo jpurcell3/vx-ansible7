@@ -121,6 +121,7 @@ class ExpansionUrls():
     hosts_url_tpl = 'https://{}/rest/vxm/v1/hosts'
     node_url_tpl = 'https://{}/rest/vxm/v1/hosts/{}'
     get_url_idrac_tpl = 'https://{}/rest/vxm/v1/hosts/{}/idrac/network'
+    get_ip_allocation_tpl = 'https://{}/rest/vxm/private/system/network-info'
 
     def __init__(self, vxm_ip):
         self.vxm_ip = vxm_ip
@@ -134,8 +135,12 @@ class ExpansionUrls():
         return ExpansionUrls.node_url_tpl.format(self.vxm_ip, node_sn)
 
     def get_idrac_ip(self, host_sn):
-        ''' shutdown api '''
+        ''' idrac api '''
         return ExpansionUrls.get_url_idrac_tpl.format(self.vxm_ip, host_sn)
+
+    def get_ipuse(self):
+        ''' netinfo api '''
+        return ExpansionUrls.get_ip_allocation_tpl.format(self.vxm_ip)
 
 
 class VxRail():
@@ -154,7 +159,6 @@ class VxRail():
         ''' doc '''
         rpt = []
         host = {}
-        nics = {}
         nic_dict = {}
         try:
             response = requests.get(url=self.expansion_urls.get_hosts(),
@@ -174,11 +178,11 @@ class VxRail():
             if not data:
                 return "No available hosts"
         for item in data:
-            hostname = item.get('hostname') 
+            hostname = item.get('hostname')
             if hostname != self.esx:
                 pass
             else:
-                list = []
+                nlist = []
                 host['Name'] = hostname
                 host['Id'] = item.get('id')
                 host['idrac_ip'] = self.get_idrac_ip(host['Id'])
@@ -188,9 +192,9 @@ class VxRail():
                     nic_dict['link_status'] = n.get('link_status')
                     nic_dict['link_speed'] = n.get('link_speed')
                     nic_dict['firmware'] = n.get('firmware_family_version')
-                    list.append(dict(nic_dict))
-                host['nics'] = list
-                LOGGER.info(host)
+                    nlist.append(dict(nic_dict))
+                host['nics'] = nlist
+#                LOGGER.info(host)
                 rpt.append(dict(host))
         return rpt
 
@@ -218,7 +222,7 @@ class VxRail():
             if not data:
                 return "No available hosts"
         for item in data:
-            list = []
+            nlist = []
             hostname = item.get('hostname')
             host['Name'] = hostname
             host['Id'] = item.get('id')
@@ -231,11 +235,37 @@ class VxRail():
                     nic_dict['link_status'] = n.get('link_status')
                     nic_dict['link_speed'] = n.get('link_speed')
                     nic_dict['firmware'] = n.get('firmware_family_version')
-                list.append(dict(nic_dict))
-                host['nics'] = list
-            LOGGER.info(host)
+                nlist.append(dict(nic_dict))
+                host['nics'] = nlist
+#            LOGGER.info(host)
             rpt.append(dict(host))
+        ip_dict = VxRail().get_ipdict()
+        LOGGER.info(ip_dict)
+        rpt.append(dict(ip_dict))
         return rpt
+
+    def get_ipdict(self):
+        ''' doc '''
+        nic_data = {}
+        try:
+            response = requests.get(url=self.expansion_urls.get_ipuse(),
+                                    verify=False,
+                                    auth=(self.vcadmin, self.vcpasswd),
+                                    )
+            response.raise_for_status()
+        except HTTPError as http_err:
+            LOGGER.error("HTTP error %s request to VxRail Manager %s", http_err, self.vxm_ip)
+            return 'error'
+        except Exception as api_exception:
+            LOGGER.error(' %s Cannot connect to VxRail Manager %s', api_exception, self.vxm_ip)
+            return 'error'
+
+        if response.status_code == 200:
+            nic_data = byte_to_json(response.content)
+            if not nic_data:
+                return "Network info is unavailable"
+#            LOGGER.info(nic_data)
+            return nic_data
 
 
     def get_idrac_ip(self, sn):

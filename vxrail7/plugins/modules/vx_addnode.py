@@ -611,7 +611,7 @@ def main():
             expansion_status = VxRail().track_expansion_status(task_id)
             LOGGER.info('cluster_expansion: track_expansion status: %s', expansion_status)
     else:
-        expansion_status = validation_status
+        module.fail_json(msg="The environment validaiton has failed. Please see the /tmp/vx-addnode.log for more details")
 
     vx_facts = {'validation_status' : expansion_status}
     vx_facts_result = dict(changed=False, ansible_facts=vx_facts)

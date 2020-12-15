@@ -52,7 +52,7 @@ options:
         required: true
     mode:
         description:
-            - vCenter mode setting. Supported options are list or 'EXTERNAL'
+            - vCenter mode setting. Supported options are list or 'external'
         type: str
         required: true
     timeout:
@@ -82,7 +82,7 @@ EXAMPLES = """
     vcadmin: "{{ vcadmin }}"
     vcpasswd: "{{ vcpasswd}}"
     ip: "{{ vxm_ip }}"
-    mode: "{{ "external" }}"
+    mode: "{{ "EXTERNAL" }}"
   register: output
 
 - debug:
@@ -181,7 +181,6 @@ class VxRail():
         self.vcadmin = module.params.get('vcadmin')
         self.vcpasswd = module.params.get('vcpasswd')
         self.auth = (self.vcadmin, self.vcpasswd)
-        self.vcmode = (module.params.get('mode')).upper()
         self.expansion_urls = ExpansionUrls(self.vxm_ip)
 
 
@@ -211,7 +210,6 @@ class VxRail():
 
 
     def get_vc_mode(self):
-
         try:
             response = requests.get(url=self.expansion_urls.getvc_mode(),
                                     verify=False,
@@ -239,8 +237,10 @@ class VxRail():
         vc_admin["password"] = self.vcpasswd
         vc_admin["username"] = self.vcadmin
         convert_json["vc_admin_user"] = vc_admin
-        convert_json["vc_mode"] = self.vcmode
+        convert_json["vc_mode"] = "external"
         LOGGER.info(' JSON object:  %s', convert_json)
+        dump = json.dumps(convert_json)
+        LOGGER.info(dump)
         return convert_json
 
     def convert_vc(self):
@@ -277,7 +277,7 @@ class VxRail():
             LOGGER.info(data)
             request_id = data['request_id']
             LOGGER.info('Request Id: %s .', request_id)
-            return request_id
+        return request_id
 
 
     def track_conversion_status(self, task_id):
@@ -300,16 +300,13 @@ class VxRail():
         LOGGER.info('Conversion Status: %s', conversion_status)
         if conversion_status == 'COMPLETED':
             LOGGER.info("The vCenter Conversion has completed")
-        elif conversion_status == 'FAILED':
+            return conversion_status
+        if conversion_status == 'FAILED':
             LOGGER.info('Expansion Task %s has failed.', task_id)
             LOGGER.info(response_json['extension']['thoroughValidationFieldErrors'])
             LOGGER.info(response_json['extension']['normalValidationFieldErrors'])
-        else:
-            LOGGER.info('Inner track_conversion method: %s', conversion_status)
-            time.sleep(30)
-
+            return "Conversion Failed"
         return conversion_status
-
 
 def main():
     ''' Go! '''
@@ -319,29 +316,21 @@ def main():
                            vcadmin=dict(default="administrator@vsphere.local"),
                            vcpasswd=dict(required=True, no_log=True),
                            ip=dict(required=True),
-                           mode=dict(required=False),
+                           mode=dict(required=True),
                            timeout=dict(type='int', default=10),
                            ),
         supports_check_mode=True,
     )
 
     conversion_status = ''
-
-    if module.params.get('mode').lower() == "list":
-        vcmode = VxRail().get_vc_mode()
-        if vcmode == 'error':
-            module.fail_json(msg="Module cannot connect to VxRail Manager")
-        vx_facts = {'mode' : vcmode}
-        vx_facts_result = dict(changed=False, ansible_facts=vx_facts)
-        module.exit_json(**vx_facts_result)
-
-
-    if module.params.get('mode').upper() != "EXTERNAL":
-        vx_facts = {'msg' : "invalid input"}
-        vx_facts_result = dict(changed=False, ansible_facts=vx_facts)
-        module.exit_json(**vx_facts_result)
-
+    mode = module.params.get('mode')
     vcmode = VxRail().get_vc_mode()
+
+    if (mode).upper() != "EXTERNAL":
+        vx_facts = {'Invalid vCenter Mode. Current Mode': vcmode}
+        vx_facts_result = dict(changed=False, ansible_facts=vx_facts)
+        module.exit_json(**vx_facts_result)
+
     if vcmode.upper() != "EMBEDDED":
         vx_facts = {"VxRail Manager": module.params.get('ip'), "msg" : 'vCenter has already been externalized'}
         vx_facts_result = dict(changed=False, ansible_facts=vx_facts)

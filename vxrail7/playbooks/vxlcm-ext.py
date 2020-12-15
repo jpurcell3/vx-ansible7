@@ -1,7 +1,7 @@
 ---
 - hosts: "{{ vxm }}"
-  vars_files:
-    - /etc/ansible/host_vars/{{ vxm }}
+#  vars_files:
+#    - /etc/ansible/host_vars/{{ vxm }}
 
   collections:
   - dellemc.vxrail
@@ -38,22 +38,13 @@
       evacuate: yes
       timeout: 3600
       validate_certs: false
-      state: absent
+      state: absent 
     delegate_to: localhost
 
 - hosts: localhost
-  vars_files:
-    - /etc/ansible/host_vars/{{ vxm }}
   collections:
   - dellemc.vxrail
   tasks:
   - include_role:
-      name: vx-upgrade
+      name: vx-intlcm
     tags: upgrade
-
-#- hosts: "{{ vxm }}"
-#  name: Remove file (delete file)
-#  tasks:
-#  file:
-#    path: /tmp/{{ bundle }}"
-#    state: absent

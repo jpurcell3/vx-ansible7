@@ -12,6 +12,26 @@ from requests.exceptions import HTTPError
 from ansible.module_utils.basic import AnsibleModule
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'certified'}
+
+DOCUMENTATION = '''
+author: Dell EMC Ansible Team (@jpurcell3) <jeff.purcell@dell.com>
+module: vx_init
+short_description: This module is used to perform the first run initialization of a VxRail 7.x Cluster
+
+description:
+ - This modules assumed nodes have been reset to factory state
+ - Minimum of 3 nodes
+ - Network configuration has been established for L2 Node discovery and Management networks
+
+'''
+
+RETURN = """
+"""
+
+
 
 class CustomLogFormatter(logging.Formatter):
     ''' Class for generating log output of this module'''

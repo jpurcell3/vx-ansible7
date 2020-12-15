@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  name: Manage System Power - Greaceful restart
+  gather_facts: False
+  tasks:
+  - name: Info
+    redfish_info:
+      baseuri: "{{ ip }}"
+      username: "{{ idrac_user }}"
+      password: "{{ idrac_password }}"
