@@ -1,7 +1,0 @@
----
-# tasks file for lcm
- - name: "Initiate VxRail Upgrade via API Request"
-   include_tasks: lcm_task.yml
-   register: tid
-   tags: upgrade
-

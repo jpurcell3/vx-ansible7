@@ -1,7 +1,0 @@
----
- - name: Get Configured Hosts
-   hosts: localhost
-   collections:
-   - dellemc.vxrail
-   roles: 
-      - vx-nodes

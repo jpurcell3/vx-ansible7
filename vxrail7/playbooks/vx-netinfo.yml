@@ -1,9 +1,0 @@
----
- - name: Collect Free Nodes
-   hosts: localhost
-   vars_files:
-    - /etc/ansible/host_vars/{{ vxm }}
-   collections:
-   - dellemc.vxrail
-   roles: 
-      - vx-netinfo

@@ -1,4 +1,0 @@
----
-# vars file for health inquiry
- collections:
- - dellemc.vxrail

@@ -1,8 +1,0 @@
----
-- name Re-image VxRail Node with VxRail NIS
-  hosts: nis-group
-  tasks:
-    - name: Execute Shell Command on NIS host
-      yum:
-        name: python3
-        state: latest
