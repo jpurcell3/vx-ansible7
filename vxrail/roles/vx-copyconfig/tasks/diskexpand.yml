@@ -1,0 +1,14 @@
+---
+# tasks file for lcm
+# Copying the Upgrade Bundle
+- name: "Check Available Disk Space"
+  shell: df -h --output=size /data/store2
+  register: root_space
+  become: yes
+
+- name: "expand VxRail Manager disk space"
+    script: /root/disk_space_expansion.py -c {{ vcenter }} -u {{ vcadmin }} -p {{ vcpasswd }}
+  when: root_space.stdout | float is lt 20
+
+- debug:
+    msg: "{{ root_space.stdout }}"

@@ -1,0 +1,37 @@
+---
+- name: Store known hosts of 'vxrail' the hosts in the inventory file
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    ssh_known_hosts_command: "ssh-keyscan -T 10"
+    ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
+    ssh_known_hosts: "{{ groups['vxrail'] }}"
+    ips: "{% set IP_ARR=[] %}{% for host in groups['vxrail'] %}{% if IP_ARR.insert(loop.index,hostvars[host]['ansible_host']) %}{% endif %}{% endfor %}{{IP_ARR}}"
+ 
+
+  tasks:
+  - name: For each host, scan for its ssh public key - This task uses the inventory file for IP address resolution
+    shell: "ssh-keyscan {{ item.0 }}, {{ item.1 }}"
+    with_together: 
+      - "{{ ssh_known_hosts }}"
+      - "{{ ips }}"
+    register: ssh_known_host_results
+    ignore_errors: yes
+
+# - name: For each host, scan for its ssh public key - Uses DNS for IP resolution
+#    shell: "ssh-keyscan {{ item }},`dig +short {{ item }}`"
+#    with_items: "{{ ssh_known_hosts }}"
+#    register: ssh_known_host_results
+#    ignore_errors: yes
+
+  - name: Add/update the public key in the '{{ ssh_known_hosts_file }}'
+    known_hosts:
+      name: "{{ item.item[0]}}"
+      key: "{{ item.stdout }}"
+      path: "{{ ssh_known_hosts_file }}"
+    with_items: "{{ ssh_known_host_results.results }}"
+
+  - debug:
+      msg: "{{ ssh_known_host_results.results[0] | type_debug  }}"

@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  collections:
+  - vmware
+  tasks:
+  - name: Get vCenter Facts
+    vmware_about_facts:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vc_info
+
+  - debug:
+       msg: "{{ vc_info }}"
+#      msg: "{{ item.cluster }}"
+#    with_items:
+#      - "{{ vm_info.virtual_machines | json_query(query) }}"
+#    vars:
+#      query: "[?guest_name=='VxRail Manager']"

@@ -1,0 +1,11 @@
+---
+# Use the VxRail API to get cluster status
+ - name: "VxRail Cluster Health"
+   dellemc.vxrail.vx_health:
+     ip: "{{ vxm }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+     
+
+ - debug:
+     msg: "VxRail: {{vxm}}, State: {{ansible_facts.state}}"

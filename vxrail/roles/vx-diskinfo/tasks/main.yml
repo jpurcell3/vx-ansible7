@@ -1,0 +1,9 @@
+---
+# Use the VxRail API to get cluster status
+ - name: Get disk list
+   include: cluster.yml
+   when: group is undefined
+       
+ - name: Perform Task on all clusters in "{{ grp }}"
+   include: group.yml
+   when: group is defined

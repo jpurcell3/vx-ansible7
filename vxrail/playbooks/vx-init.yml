@@ -1,0 +1,10 @@
+---
+- name: Perform a VxRail First Run Deployment
+  hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+
+  collections:
+  - dellemc.vxrail
+  roles:
+  - vx-init

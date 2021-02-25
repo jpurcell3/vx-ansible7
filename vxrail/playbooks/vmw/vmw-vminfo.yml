@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  gather_facts: no
+  collections:
+  - vmware
+  tasks:
+  - name: Maint Mode test
+    vmware_vm_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vm_info
+
+  - set_fact:
+      cluster: "{{ item }}"
+    with_items:
+      - "{{ vm_info.virtual_machines | json_query(query) }}"
+    vars:
+      query: "[?guest_name=='VxRail Manager']"
+
+  - debug:
+      msg: "{{ cluster.uuid }}"

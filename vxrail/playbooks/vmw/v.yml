@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+  collections:
+  - vmware
+  tasks:
+  - name: VMernel Info
+    vmware_vmkernel_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+#      cluster_name: "{{ cluster }}"
+      esxi_hostname: "{{ esx }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vmkinfo
+
+  - debug: msg="{{ lookup(vmkinfo.host_vmk_info['mgt3-esx01.lab2.local'], 'vmk2') }}"
+#     vars:
+#       jmesquery: "{id: id, task: owner, state: state, complete: progress}"
+#       var: item
+#     loop: "{{ requests.json[-1] | json_query('[*].{id: id, task: owner, state: state}') }}"
+#    when: "'mgt3-esx01.lab2.local' in item.key"

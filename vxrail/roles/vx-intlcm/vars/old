@@ -1,0 +1,15 @@
+---
+# vars file for lcm
+bundle: VXRAIL_COMPOSITE-7.0.010.zip
+vxm: 172.16.32.10
+pscroot: root
+pscpasswd: VMw@re123!
+vcadmin: administrator@vsphere.local
+vcpasswd: VMw@re123!
+vcrootpasswd: VMw@re123!
+psc_esx: mgt4-esx01.lab2.local
+vcsa_esx: mgt4-esx01.lab2.local
+tgt_esx: mgt4-esx04.lab2.local
+tmpip: 172.16.32.100
+gateway: 172.16.32.1
+netmask: 255.255.255.0

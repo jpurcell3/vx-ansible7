@@ -1,0 +1,7 @@
+---
+ - name: Request Free Hosts
+   hosts: control
+   collections:
+   - dellemc.vxrail
+   roles:
+     - hostinfo

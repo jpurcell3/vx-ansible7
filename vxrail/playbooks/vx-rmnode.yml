@@ -1,0 +1,11 @@
+---
+- name: Remove a node from VxRail Cluster
+  hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+
+  collections:
+  - dellemc.vcrail
+  roles:
+  - vx-rmnode
+

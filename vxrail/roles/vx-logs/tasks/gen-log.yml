@@ -1,0 +1,16 @@
+---
+# Use the VxRail API to get cluster status
+ -  name: "Request Log creation"
+    dellemc.vxrail.vx_logs:
+      vcadmin: "{{ vcadmin }}"
+      vcpasswd: "{{ vcpasswd }}"
+      ip: "{{ vxm }}"
+    register: output
+
+ - debug:
+     msg: "{{ output.ansible_facts }}"
+
+
+ - debug:
+     msg: "{{results}}"
+   

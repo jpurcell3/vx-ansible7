@@ -1,0 +1,14 @@
+---
+# tasks file for lcm
+# Copying the Upgrade Bundle
+- name: "Check Available Disk Space"
+  shell: df --output=avail /
+  register: root_space
+  become: yes
+
+- fail:
+    msg: Cannot proceed. The / partition does not have the required space (6.2GB). "{{ root_space.stdout }}"
+  when: root_space.stdout | float is lt (6200000)
+
+- debug:
+    msg: "{{ root_space.stdout }}"

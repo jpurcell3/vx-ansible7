@@ -1,0 +1,38 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+   uuids: []
+  collections:
+  - vmware
+  tasks:
+  - name: Maint Mode test
+    vmware_vm_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vm_info
+
+  - set_fact:
+      uuids:  "{{ uuids + [item.uuid] }}"
+    with_items:
+      - "{{ vm_info.virtual_machines }}"
+
+  - debug:
+      msg: "{{ uuids }}"
+
+  - name: Remove VM Snapshot
+    vmware_guest_snapshot:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      datacenter: "{{ datacenter_name }}"
+      uuid: "{{ item }}"
+      state: absent
+      snapshot_name: snap2
+      description: "pre-upgrade"
+      validate_certs: false
+    delegate_to: localhost
+    with_items: "{{ uuids }}"

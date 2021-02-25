@@ -1,0 +1,92 @@
+2020-06-12 20:45:00,591 [INFO]	Performing pre-check of environment...
+2020-06-12 20:45:02,336 [INFO]	Current vCenter Settings
+2020-06-12 20:45:02,337 [INFO]	   VxRail Health: Healthy
+2020-06-12 20:45:02,337 [INFO]	{'state': 'Healthy'}
+2020-06-12 20:45:02,337 [INFO]	Converting embedded vCenter Server...
+2020-06-12 20:45:02,337 [INFO]	Generatine JSON file...
+2020-06-12 20:45:02,337 [INFO]	 JSON object:  {'psc_mode': 'EXTERNAL', 'vc_admin_user': {'password': 'VMw@re123!', 'username': 'administrator@vsphere.local'}, 'vc_mode': 'EXTERNAL'}
+2020-06-12 20:45:06,021 [ERROR]	/tmp/ansible_vcmode_payload_ipev3vtc/ansible_vcmode_payload.zip/ansible/modules/vcmode.py:180	 'Response' object has no attribute 'body' Cannot connect to VxRail Manager vxr7
+2020-06-12 20:45:06,021 [INFO]	Request returned sucessfull status
+2020-06-12 20:45:06,021 [INFO]	<Response [202]>
+2020-06-12 20:45:06,021 [INFO]	Request Id: SBI_2 .
+2020-06-12 20:45:06,022 [INFO]	Conversion Task: vxrail task_ID: SBI_2.
+2020-06-12 20:45:06,022 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-12 20:45:12,592 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-12 20:45:12,592 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-12 20:45:17,598 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-12 20:45:17,598 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-12 20:45:23,287 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-12 20:45:23,287 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-12 20:45:28,293 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-12 20:45:28,293 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-12 20:45:34,100 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-12 20:45:34,100 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-12 20:45:39,106 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-12 20:45:39,106 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-12 20:45:44,834 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-12 20:45:44,834 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-12 20:45:49,836 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-12 20:45:49,836 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-12 20:45:55,679 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-12 20:45:55,679 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-12 20:46:00,685 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-12 20:46:00,685 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-12 20:46:07,202 [INFO]	Conversion Status: COMPLETED
+2020-06-12 20:46:07,202 [INFO]	The vCenter Conversion has completed
+2020-06-12 20:46:07,202 [INFO]	vcenter conversion: track_conversion status: COMPLETED
+2020-06-17 08:05:57,112 [INFO]	Performing pre-check of environment...
+2020-06-17 08:05:57,747 [INFO]	Current vCenter Settings
+2020-06-17 08:05:57,747 [INFO]	   VxRail Health: Healthy
+2020-06-17 08:05:57,747 [INFO]	{'state': 'Healthy'}
+2020-06-17 08:05:57,747 [INFO]	Converting embedded vCenter Server...
+2020-06-17 08:05:57,747 [INFO]	Generatine JSON file...
+2020-06-17 08:05:57,747 [INFO]	 JSON object:  {'psc_mode': 'EXTERNAL', 'vc_admin_user': {'password': 'VMw@re123!', 'username': 'administrator@vsphere.local'}, 'vc_mode': 'EXTERNAL'}
+2020-06-17 08:06:00,061 [ERROR]	/tmp/ansible_vcmode_payload_29mju_zo/ansible_vcmode_payload.zip/ansible/modules/vcmode.py:265	 'Response' object has no attribute 'body' Cannot connect to VxRail Manager vxr1
+2020-06-17 08:06:00,061 [INFO]	Request returned sucessfull status
+2020-06-17 08:06:00,062 [INFO]	<Response [202]>
+2020-06-17 08:06:00,062 [INFO]	Request Id: SBI_2 .
+2020-06-17 08:06:00,062 [INFO]	Conversion Task: vxrail task_ID: SBI_2.
+2020-06-17 08:06:00,062 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-17 08:06:05,730 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-17 08:06:05,731 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-17 08:06:10,736 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-17 08:06:10,736 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-17 08:06:16,391 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-17 08:06:16,391 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-17 08:06:21,397 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-17 08:06:21,397 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-17 08:06:27,101 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-17 08:06:27,101 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-17 08:06:32,106 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-17 08:06:32,107 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-17 08:06:37,792 [INFO]	Conversion Status: COMPLETED
+2020-06-17 08:06:37,792 [INFO]	The vCenter Conversion has completed
+2020-06-17 08:06:37,792 [INFO]	vcenter conversion: track_conversion status: COMPLETED
+2020-06-18 13:42:58,698 [INFO]	Performing pre-check of environment...
+2020-06-18 13:42:59,398 [INFO]	Current vCenter Settings
+2020-06-18 13:42:59,398 [INFO]	   VxRail Health: Healthy
+2020-06-18 13:42:59,398 [INFO]	{'state': 'Healthy'}
+2020-06-18 13:42:59,398 [INFO]	Converting embedded vCenter Server...
+2020-06-18 13:42:59,398 [INFO]	Generatine JSON file...
+2020-06-18 13:42:59,398 [INFO]	 JSON object:  {'psc_mode': 'EXTERNAL', 'vc_admin_user': {'password': 'VMw@re123!', 'username': 'administrator@vsphere.local'}, 'vc_mode': 'EXTERNAL'}
+2020-06-18 13:43:01,356 [ERROR]	/tmp/ansible_vcmode_payload_kvnnnb3c/ansible_vcmode_payload.zip/ansible/modules/vcmode.py:265	 'Response' object has no attribute 'body' Cannot connect to VxRail Manager vxr7
+2020-06-18 13:43:01,356 [INFO]	Request returned sucessfull status
+2020-06-18 13:43:01,356 [INFO]	<Response [202]>
+2020-06-18 13:43:01,356 [INFO]	Request Id: SBI_2 .
+2020-06-18 13:43:01,357 [INFO]	Conversion Task: vxrail task_ID: SBI_2.
+2020-06-18 13:43:01,357 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-18 13:43:07,047 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-18 13:43:07,047 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-18 13:43:12,048 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-18 13:43:12,048 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-18 13:43:17,712 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-18 13:43:17,712 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-18 13:43:22,717 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-18 13:43:22,718 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-18 13:43:28,409 [INFO]	Conversion Status: IN_PROGRESS
+2020-06-18 13:43:28,409 [INFO]	Inner track_conversion method: IN_PROGRESS
+2020-06-18 13:43:33,414 [INFO]	vcenter conversion: track_conversion status: IN_PROGRESS
+2020-06-18 13:43:33,415 [INFO]	vcenter_conversion: sleeping 10 seconds...
+2020-06-18 13:43:39,072 [INFO]	Conversion Status: COMPLETED
+2020-06-18 13:43:39,072 [INFO]	The vCenter Conversion has completed
+2020-06-18 13:43:39,072 [INFO]	vcenter conversion: track_conversion status: COMPLETED

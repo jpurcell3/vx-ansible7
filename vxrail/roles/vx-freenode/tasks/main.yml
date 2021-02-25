@@ -1,0 +1,9 @@
+---
+# tasks file for available-hosts
+ - name: Get Available Hosts
+   include: cluster.yml
+   when: group is undefined
+       
+ - name: Perform Task on all clusters in "{{ grp }}"
+   include: group.yml
+   when: group is defined

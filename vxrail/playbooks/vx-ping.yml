@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: check if {{vxm}} port 443 is accessible
+      wait_for:
+        host: "{{vxm}}"
+        port: 443
+        state: started
+        delay: 0
+        timeout: 1
+      register: status
+
+    - debug:
+        msg:  "{{status}}"
+      when: status.failed == false

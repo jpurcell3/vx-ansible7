@@ -1,0 +1,15 @@
+---
+# tasks file for vxm-ping---
+  - name: check if {{vxm}} port 22 is accessible
+    gather_facts: False
+    wait_for:
+      host: "{{vxm}}"
+      port: 443
+      state: started
+      delay: 0
+      timeout: 1
+    register: status
+
+  - debug:
+      msg:  "{{status}}"
+    when: status.failed == false

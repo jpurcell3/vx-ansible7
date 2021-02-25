@@ -1,0 +1,39 @@
+---
+ - hosts: localhost
+   collections:
+   - dellemc.vxrail
+   tasks:
+   - dellemc.vxrail.vx_logs:
+       vcadmin: "{{ vcadmin }}"
+       vcpasswd: "{{ vcpasswd }}"
+       ip: "{{ vxm }}"
+     register: output
+
+   - debug:
+       msg: "{{ output }}"
+
+   - add_host:
+       name: "DUMMY"
+       IP: "{{ vxm }}"
+       PATH: "{{ output.ansible_facts.file_path }}"
+
+ - hosts: "{{hostvars['DUMMY']['IP'] }}" 
+   gather_facts: false
+   vars:
+     
+     fpath: "{{ hostvars['DUMMY']['PATH'] }}"
+
+   tasks:
+   - action: ping
+     register: ping_results
+
+   - name: Copy file from "{{vxm}}"
+     fetch:
+      src: "{{ fpath }}"
+      flat: yes
+      dest: /tmp/
+     become: yes
+     register: results
+
+   - debug:
+       msg: "Ping: {{ ping_results }}, FileCopy: {{results}}"

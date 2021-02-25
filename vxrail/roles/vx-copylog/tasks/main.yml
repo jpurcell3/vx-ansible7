@@ -1,0 +1,14 @@
+---
+ - hosts: "{{ vxm }}"
+   tasks:
+   - name: Copy file from "{{vxm}}"
+     fetch:
+      src: "{{ filepath }}"
+      flat: yes
+      dest: /tmp
+     become: yes
+     register: results
+
+# - debug:
+#     msg: "{{results}}"
+

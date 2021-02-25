@@ -1,0 +1,19 @@
+---
+# tasks file for lcm
+# Performing VxRail API Upgrade
+- name: "Initiate the LCM upgrade on the VxRail Cluster"
+  dellemc.vxrail.vx_lcm:
+    bundle: /tmp/{{bundle}}
+    ip: "{{vxm}}"
+    pscroot: root
+    pscpasswd: "{{pscpasswd}}"
+    vcadmin: "{{vcadmin}}"
+    vcpasswd: "{{vcpasswd}}"
+    vcroot: root
+    vcrootpasswd: "{{vcrootpasswd}}"
+    psc_host: "{{psc_esx}}"
+    vcsa_host: "{{vcsa_esx}}"
+    tgt_esx: "{{tgt_esx}}"
+    tmpip: "{{tmpip}}"
+    gw: "{{gateway}}"
+    mask: "{{netmask}}"

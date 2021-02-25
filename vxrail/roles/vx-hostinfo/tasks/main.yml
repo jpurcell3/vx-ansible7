@@ -1,0 +1,12 @@
+---
+# tasks file for host information
+ - name: Get Hosts Details
+   dellemc.vxrail.vx_hostinfo:
+     ip: "{{vxm}}"
+     vcadmin: "{{vcadmin}}"
+     vcpasswd: "{{vcpasswd}}"
+     host: "{{host}}"
+   register: dict
+
+ - debug:
+     msg: "{{ dict }}"

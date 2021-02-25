@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  collections:
+  - vmware.main
+  tasks:
+  - name: Get a list of datacenters for the vcenter server
+    vmware_datacenter_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: datacenter_info
+
+  - debug:
+       msg: "{{ datacenter_info }}"

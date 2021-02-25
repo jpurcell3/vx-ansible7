@@ -1,0 +1,7 @@
+---
+# tasks file for lcm
+# - name: "Expand the disk space if necessary"
+#   include_tasks: diskfree.yml
+
+ - name: "Copy files to target VXRail Manager"
+   include_tasks: copy_files.yml

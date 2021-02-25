@@ -1,0 +1,15 @@
+---
+- name: "Copy VxRail Log Bundle to local server"
+  hosts: "{{vxm}}"
+  tasks:
+  - name: Copy file from "{{vxm}}"
+    fetch:
+     src: "{{ bundle }}"
+     flat: yes
+     dest: /tmp
+    become: yes
+    register: results
+
+  - debug:
+      msg: "{{results}}"
+

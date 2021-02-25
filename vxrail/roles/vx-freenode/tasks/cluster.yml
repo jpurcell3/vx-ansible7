@@ -1,0 +1,12 @@
+---
+# tasks file for available-hosts
+ - name: Get Available Hosts
+   dellemc.vxrail.vx_freenode:
+     ip: "{{ vxm }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+   register: dict
+
+ - debug:
+#     msg: "{{ dict | type_debug }}"
+     msg: "Cluster: {{ vxm }}, FreeNodes: {{ dict.ansible_facts.Count }}"

@@ -1,0 +1,13 @@
+---
+# vars file for lcm
+vxm: vxr7
+bundle: VXRAIL_COMPOSITE-4.7.510.zip
+vcadmin: 
+  - administrator@vsphere.local
+vcpasswd:
+  - 'VMw@re123!'
+vc_root_password:
+  - 'VMw@re123!'
+psc_root_password:
+  - 'VMw@re123!'
+

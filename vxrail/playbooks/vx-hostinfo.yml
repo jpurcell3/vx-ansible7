@@ -1,0 +1,9 @@
+---
+ - name: gather host facts
+   hosts: localhost
+   vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+   collections:
+   - dellemc.vxrail
+   roles:
+      - vx-hostinfo

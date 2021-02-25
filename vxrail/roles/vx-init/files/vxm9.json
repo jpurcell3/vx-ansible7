@@ -1,0 +1,201 @@
+{
+    "version": "7.0.010",
+    "global": {
+        "cluster_type": "STANDARD",
+        "ntp_servers": [
+            "170.0.0.254"
+        ],
+        "is_internal_dns": true,
+        "dns_servers": [],
+        "syslog_servers": [],
+        "top_level_domain": "lab5.local",
+        "cluster_management_netmask": "255.255.255.0",
+        "cluster_management_gateway": "172.17.32.1",
+        "cluster_vsan_netmask": "255.255.255.0",
+        "cluster_vmotion_netmask": "255.255.255.0"
+    },
+    "hosts": [
+        {
+            "host_serial_number": "8QWXLR2",
+            "hostname": "mgt-esx01",
+            "accounts": {
+                "root": {
+                    "username": "root",
+                    "password": "VMw@re123!"
+                },
+                "management": {
+                    "username": "vxadmin",
+                    "password": "VMw@re123!"
+                }
+            },
+            "geo_location": {
+                "rack_name": null,
+                "position": null
+            },
+            "network": [
+                {
+                    "type": "MANAGEMENT",
+                    "ip": "172.17.32.11"
+                },
+                {
+                    "type": "VSAN",
+                    "ip": "172.17.33.11"
+                },
+                {
+                    "type": "VMOTION",
+                    "ip": "172.17.34.11"
+                }
+            ]
+        },
+        {
+            "host_serial_number": "8QXVLR2",
+            "hostname": "mgt-esx02",
+            "accounts": {
+                "root": {
+                    "username": "root",
+                    "password": "VMw@re123!"
+                },
+                "management": {
+                    "username": "vxadmin",
+                    "password": "VMw@re123!"
+                }
+            },
+            "geo_location": {
+                "rack_name": null,
+                "position": null
+            },
+            "network": [
+                {
+                    "type": "MANAGEMENT",
+                    "ip": "172.17.32.12"
+                },
+                {
+                    "type": "VSAN",
+                    "ip": "172.17.33.12"
+                },
+                {
+                    "type": "VMOTION",
+                    "ip": "172.17.34.12"
+                }
+            ]
+        },
+        {
+            "host_serial_number": "8QWZHQ2",
+            "hostname": "mgt-esx03",
+            "accounts": {
+                "root": {
+                    "username": "root",
+                    "password": "VMw@re123!"
+                },
+                "management": {
+                    "username": "vxadmin",
+                    "password": "VMw@re123!"
+                }
+            },
+            "geo_location": {
+                "rack_name": null,
+                "position": null
+            },
+            "network": [
+                {
+                    "type": "MANAGEMENT",
+                    "ip": "172.17.32.13"
+                },
+                {
+                    "type": "VSAN",
+                    "ip": "172.17.33.13"
+                },
+                {
+                    "type": "VMOTION",
+                    "ip": "172.17.34.13"
+                }
+            ]
+        },
+        {
+            "host_serial_number": "8QXWLR2",
+            "hostname": "mgt-esx04",
+            "accounts": {
+                "root": {
+                    "username": "root",
+                    "password": "VMw@re123!"
+                },
+                "management": {
+                    "username": "vxadmin",
+                    "password": "VMw@re123!"
+                }
+            },
+            "geo_location": {
+                "rack_name": null,
+                "position": null
+            },
+            "network": [
+                {
+                    "type": "MANAGEMENT",
+                    "ip": "172.17.32.14"
+                },
+                {
+                    "type": "VSAN",
+                    "ip": "172.17.33.14"
+                },
+                {
+                    "type": "VMOTION",
+                    "ip": "172.17.34.14"
+                }
+            ]
+        }
+    ],
+    "vcenter": {
+        "customer_supplied": false,
+        "vxrail_supplied_vc_ip": "172.17.32.9",
+        "vxrail_supplied_vc_name": "mgt-vcenter",
+        "accounts": {
+            "root": {
+                "username": "root",
+                "password": "VMw@re123!"
+            },
+            "administrator": {
+                "username": "administrator@vsphere.local",
+                "password": "VMw@re123!"
+            },
+            "management": {
+                "username": "vxadmin",
+                "password": "VMw@re123!"
+            }
+        }
+    },
+    "network": {
+        "vds": {
+            "nic_profile": "TWO_HIGH_SPEED",
+            "systemvm_portgroup_binding_type": "EPHEMERAL",
+            "portgroups": [
+                {
+                    "type": "MANAGEMENT",
+                    "vlan_id": 0
+                },
+                {
+                    "type": "VSAN",
+                    "vlan_id": 1733
+                },
+                {
+                    "type": "VMOTION",
+                    "vlan_id": 1734
+                }
+            ]
+        }
+    },
+    "vxrail_manager": {
+        "name": "mgt-vxm",
+        "ip": "172.17.32.10",
+        "accounts": {
+            "root": {
+                "username": "root",
+                "password": "VMw@re123!"
+            },
+            "service": {
+                "username": "mystic",
+                "password": "Emc-1234!"
+            }
+        }
+    }
+}
+

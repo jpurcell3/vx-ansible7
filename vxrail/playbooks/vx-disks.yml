@@ -1,0 +1,13 @@
+---
+- name: Get Disk Details
+  hosts: localhost
+#  vars_files:
+#    - /etc/ansible/host_vars/{{ vxm }}
+  vars:
+    - grp:  "{{ groups['vxrail4'] }}"
+    - no_logging: no
+
+  collections:
+  - dellemc.vxrail
+  roles:
+  - vx-diskinfo

@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+  name: Manage System Power - Greaceful restart
+  gather_facts: False
+  tasks:
+  - name: Restart system power gracefully
+    redfish_command:
+      category: Systems
+      command: PowerReboot
+      baseuri: "{{ ip }}"
+      username: "{{ username }}"
+      password: "{{ password }}"

@@ -1,0 +1,27 @@
+---
+- name: Get the VxRail host health"
+  hosts: control
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+  tasks:
+   - name: "get vxrail job requests"
+     uri:
+       url: "https://{{ vxm }}/rest/vxm/v1/requests"
+       headers:
+        "Content-Type": "application/json"
+        "Accept": "application/json"
+        "Cache-Control": "no-cache"
+       body_format: json
+       return_content: yes
+       user: "{{ vcadmin }}"
+       password: "{{ vcpasswd }}"
+       force_basic_auth: yes
+       validate_certs: no
+       status_code: 200
+     register: requests
+
+   - debug: msg="{{ requests.json[0] | json_query(jmesquery) }}"
+     vars:
+       jmesquery: "{id: id, task: owner, state: state, complete: progress}"
+#       var: item
+#     loop: "{{ requests.json[-1] | json_query('[*].{id: id, task: owner, state: state}') }}"

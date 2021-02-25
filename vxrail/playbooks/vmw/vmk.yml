@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+  collections:
+  - vmware
+  tasks:
+  - name: VMernel Info
+    vmware_vmkernel_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+#      cluster_name: "{{ cluster }}"
+      esxi_hostname: "{{ esx }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vmkinfo
+
+#  - name: set_fact to vmk 
+#    set_fact:
+#      vmk: item.key
+#    loop: "{{ lookup('dict', vm) }}"
+#    when: "'alice' in item.key"
+
+  - debug:
+      msg: "{{ vmkinfo.host_vmk_info['mgt3-esx01.lab2.local'].vmk }}"
+    when: vmkinfo.host_vmk_info['mgt3-esx01.lab2.local'].enable_vsan == "true"

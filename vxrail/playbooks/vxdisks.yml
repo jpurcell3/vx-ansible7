@@ -1,0 +1,25 @@
+---
+- name: Get Cluster Disks
+  hosts: localhost
+  gather_facts: no
+  tasks:
+   - name: "/v1/disk request"
+     uri:
+       url: "https://{{ vxm }}/rest/vxm/v1/disks"
+       headers:
+        "Content-Type": "application/json"
+        "Accept": "application/json"
+        "Cache-Control": "no-cache"
+       body_format: json
+       return_content: yes
+       user: "{{ vcadmin }}"
+       password: "{{ vcpasswd }}"
+       force_basic_auth: yes
+       validate_certs: no
+       status_code: 200
+     register: requests
+
+
+   - debug:
+       var: item
+     loop: "{{ requests.json | json_query('[*].{sn: sn, state: disk_state}') }}"

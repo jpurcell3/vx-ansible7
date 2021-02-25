@@ -1,0 +1,7 @@
+---
+# Use the VxRail API to get cluster status
+#  ANSIBLE_STDOUT_CALLBACK: tree
+- name: "Get VxRail Host Health Status"
+  include: cluster-health.yml
+  include: syshealth.yml
+  include: hostinfo.yml

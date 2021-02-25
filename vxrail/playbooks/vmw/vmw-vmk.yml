@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+  collections:
+  - vmware
+  tasks:
+#  - name: port groups
+#    vmware_portgroup_info:
+#      hostname: "{{ vcenter }}"
+#      username: "{{ vcadmin }}"
+#      password: "{{ vcpasswd }}"
+#      cluster_name: "{{ cluster }}"
+#      esxi_hostname: "{{ esx }}"
+#      validate_certs: false
+#    delegate_to: localhost
+#    register: pginfo
+#
+#  - debug:
+#      msg: "{{ pginfo }}"
+
+  - name: VMernel Info
+    vmware_vmkernel_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      cluster_name: "{{ cluster }}"
+      esxi_hostname: "{{ esx }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vmkinfo
+
+  - debug: msg="{{ item }}"
+    when: vmkinfo.device == vmk4
+#  - debug: msg="{{ vmkinfo | type_debug }}"
+#     vars:
+#       jmesquery: "{id: id, task: owner, state: state, complete: progress}"
+#       var: item
+#     loop: "{{ requests.json[-1] | json_query('[*].{id: id, task: owner, state: state}') }}"
+
+#  - debug: msg="{{ requests.json[0] | json_query(jmesquery) }}"
+#     vars:
+#       jmesquery: "{id: id, task: owner, state: state, complete: progress}"
+#       var: item
+#     loop: "{{ requests.json[-1] | json_query('[*].{id: id, task: owner, state: state}') }}"
+
+
+
+# - name: Change MTU value
+#   vmware_vmkernel:
+#     jmesquery: "{id: id, task: owner, state: state, complete: progress}"
+

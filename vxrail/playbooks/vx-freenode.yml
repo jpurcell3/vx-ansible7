@@ -1,0 +1,14 @@
+---
+ - name: Request Free Hosts
+   gather_facts: false
+   hosts: localhost
+   vars_files:
+    - /etc/ansible/host_vars/{{ vxm }}
+   vars:
+    - grp:  "{{ groups['vxrail'] }}"
+    - no_logging: no
+
+   collections:
+   - dellemc.vxrail
+   roles:
+     - vx-freenode

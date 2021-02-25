@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  collections:
+  - vmware
+  tasks:
+  - name: Maint Mode test
+    vmware_maintenancemode:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      esxi_hostname: "{{ host }}"
+      vsan: ensureObjectAccessibility
+      evacuate: yes
+      timeout: 3600
+      validate_certs: false
+      state: "{{ state }}"
+    delegate_to: localhost
+

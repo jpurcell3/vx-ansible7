@@ -1,0 +1,2 @@
+#!/bin/bash
+test-module -m remove-vxrailhost.py -a "ip=172.17.32.10 user=administrator@vsphere.local password=VMw@re123! esxhost=mgt-esx04.lab5.local vcsa_user=root vcsa_password=VMw@re123!" 

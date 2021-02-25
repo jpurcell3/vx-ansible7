@@ -1,0 +1,24 @@
+---
+# Use the VxRail API to get cluster status
+ -  name: "VxRail Cluster Health"
+    vx_health:
+     ip: "{{ vxmgr }}"
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+    register: vx_facts_001
+
+ -  debug:
+      #msg: "{{ vx_facts_001.ansible_facts['hosts'][0].name }}"
+      msg: "{{ vx_facts_001.ansible_facts['hosts'][0] }}"
+
+# - debug:
+#     msg: "{{ vx_facts_001 }}"
+
+ - assert:
+     that:
+#       - "vx_facts_001.ansible_facts['hosts'][0]['state'] == 'Healthy'" 
+#       - "vx_facts_001.ansible_facts['hosts'][1]['state'] == 'Healthy'" 
+#       - "vx_facts_001.ansible_facts['hosts'][2]['state'] == 'Healthy'" 
+#       - "vx_facts_001.ansible_facts['hosts'][3]['state'] == 'Healthy'" 
+#       - "vx_facts_001['name'] == hosts[0].name"
+

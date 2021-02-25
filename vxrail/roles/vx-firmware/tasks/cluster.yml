@@ -1,0 +1,14 @@
+---
+# Use the VxRail API to get cluster status
+ - name: Firmware Report
+   dellemc.vxrail.vx_firmware:
+    ip: "{{vxm}}"
+    vcadmin: "{{vcadmin}}"
+    vcpasswd: "{{vcpasswd}}"
+    host: "{{host}}"
+   register: vx_facts
+
+ - debug:
+     msg: "{{ vx_facts }}"
+
+

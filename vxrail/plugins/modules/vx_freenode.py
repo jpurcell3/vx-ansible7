@@ -1,0 +1,125 @@
+#!/usr/bin/python3
+#"""
+#Script to automate VxRail node expansion by RESTful API
+#"""
+
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+
+DOCUMENTATION = '''
+author:  Dell EMC VxRail Ansible Team (@jpurcell3) <jeff.purcell@dell.com>
+module: vx_freenode
+short_description: This module is used to query the cluster for unconfigured nodes
+
+description:
+ - VxRail Manager has been deployed and is in good health
+ - Nodes have been initialized and are available for discovery using the proxy service
+
+options:
+
+    name:
+        description:
+           - Name of the module. User defined name
+        type: str
+        required: false
+    vcadmin:
+        description:
+            - The vcenter administrative user account defined to VxRail Manager
+        type: str
+        required: true
+    vcpasswd:
+        description:
+            - The vcenter administrator password defined to VxRail Manager
+        type: str
+        required: true
+    ip:
+        description:
+            - The VxRail Manager IP address. Note FQDN is not acceptable.
+        type: str
+        required: true
+    timeout:
+        description:
+            - The timeout value, in milliseconds, assigned to the REST URL request. Default value is 10.
+        type: int
+        required: false
+
+vserion_added: "2.9"
+
+'''
+EXAMPLES = """
+ - name: search for available nodes
+   vx_freenode:
+     vcadmin: "{{ vcadmin }}"
+     vcpasswd: "{{ vcpasswd }}"
+     vxm: "{{ vxm }}"
+   register: output
+
+ - debug:
+     msg: "{{ output }}"
+"""
+
+RETURN = """
+"""
+
+# add package path if script run on VxRail manager
+import json
+from collections import OrderedDict
+import requests
+import chardet
+import urllib3
+from ansible.module_utils.basic import AnsibleModule
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+def byte_to_json(body):
+    return json.loads(body.decode(chardet.detect(body)["encoding"]))
+
+class VxHosts():
+
+    def __init__(self):
+        self.vxm_ip = module.params.get('ip')
+        self.timeout = module.params.get('timeout')
+        self.username = module.params.get('vcadmin')
+        self.password = module.params.get('vcpasswd')
+        self.auth = self.username, self.password
+
+    def run(self):
+        result = OrderedDict()
+        result = {
+            'Count': None
+        }
+
+        self.url = 'https://%s/extension/mystic/v1/system/available-hosts' % self.vxm_ip
+        response = requests.get(url=self.url, verify=False, auth=self.auth, timeout=self.timeout)
+
+        if not response:
+            module.fail_json(msg="No valid or no response from url %s within %s seconds (timeout)" % (self.url, self.timeout))
+
+        if response.content:
+            data = byte_to_json(response.content)
+            #result['Count'] = (len(data))
+            for i, n in enumerate(data):
+                result[i] = n.get('id')
+            result['Count'] = (len(data))
+            return result
+        return "No Hosts Available"
+
+def main():
+    global module
+    module = AnsibleModule(
+        argument_spec=dict(
+            name=dict(required=False),
+            vcadmin=dict(required=True),
+            vcpasswd=dict(required=True, no_log=True),
+            ip=dict(required=True),
+            timeout=dict(type='int', default=10),
+        ),
+        supports_check_mode=True,
+    )
+
+    results = VxHosts().run()
+    vx_facts_result = dict(changed=False, ansible_facts=results)
+    module.exit_json(**vx_facts_result)
+
+if __name__ == '__main__':
+    main()

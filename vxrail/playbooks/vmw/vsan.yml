@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  vars:
+    cluster: VxRail-Cluster
+  collections:
+  - vmware
+  tasks:
+  - name: Get vCenter Facts
+    vmware_vsan_health_info:
+      hostname: "{{ vcenter }}"
+      username: "{{ vcadmin }}"
+      password: "{{ vcpasswd }}"
+      cluster_name: "{{ cluster }}"
+      validate_certs: false
+    delegate_to: localhost
+    register: vsan_info
+
+  - debug:
+       msg: "{{ vsan_info }}"
+
+  - local_action:
+      module: copy
+      content: "{{ vsan_info }}"
+      dest: "/tmp/vsan.json"

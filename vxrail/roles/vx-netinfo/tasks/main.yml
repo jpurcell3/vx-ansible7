@@ -1,0 +1,14 @@
+---
+# Use the VxRail API to get cluster status
+ -  name: Get network info
+    dellemc.vxrail.vx_netinfo:
+     ip: "{{vxm}}"
+     vcadmin: "{{vcadmin}}"
+     vcpasswd: "{{vcpasswd}}"
+     host: "{{host}}"
+    register: vx_facts
+
+ - name: "Display Network Information"
+   debug:
+     msg: "{{ vx_facts }}"
+

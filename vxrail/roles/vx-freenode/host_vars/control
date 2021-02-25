@@ -1,0 +1,7 @@
+ansible_host: 127.0.0.1
+ansible_ssh_user: root
+ansible_ssh_password: VMw@re123!
+vx_host: vxr7
+vc_admin: administrator@vsphere.local
+vc_password: VMw@re123!
+
